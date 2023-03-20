@@ -1,7 +1,12 @@
 # using SendGrid's Python Library
 # https://github.com/sendgrid/sendgrid-python
 
-API_KEY = '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'
+import os
+# retrieving API Key from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
+API_KEY = os.getenv('SENDGRID_API_KEY')
 
 import sendgrid
 from sendgrid.helpers.mail import Mail
