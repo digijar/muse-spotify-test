@@ -25,8 +25,10 @@
                                 </div>
                             </form>
                             <div>
-                                <p class="mb-0  text-center">Don't have an account? 
-                                    <RouterLink to=/signup><a href="signup.html" class="text-primary fw-bold">Sign Up</a></RouterLink></p>
+                                <p class="mb-0  text-center">Don't have an account?
+                                    <RouterLink to=/signup><a href="signup.html" class="text-primary fw-bold">Sign Up</a>
+                                    </RouterLink>
+                                </p>
                             </div>
 
                         </div>
