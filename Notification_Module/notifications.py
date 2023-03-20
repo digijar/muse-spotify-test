@@ -11,12 +11,13 @@ import requests
 import twilio
 from twilio.rest import Client
 
-# for SendGrid
-API_KEY = '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'
+# retrieving API Key from .env file
+from dotenv import load_dotenv
+load_dotenv()
 
-# for twilio
-account_sid = 'ACb659e2c670af156d9331b323e2d15324'
-auth_token = '0de7a8f775950e4b2411b3da961d814c'
+API_KEY = os.getenv('SENDGRID_API_KEY')
+account_sid = os.getenv('TWILLO_ACCOUNT_SID')
+auth_token = os.getenv('TWILLO_AUTH_TOKEN')
 
 app = Flask(__name__)
 
