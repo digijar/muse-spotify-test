@@ -15,8 +15,4 @@ export default {
         <h6>jfiore.2021@scis.smu.edu.sg</h6>
     </div>
 
-    <div>
-        <h5>Notifications</h5>
-        <NotifComponent></NotifComponent>
-    </div>
 </template>

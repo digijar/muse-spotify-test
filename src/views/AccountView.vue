@@ -1,10 +1,11 @@
 <script>
 import TopNav from '../components/TopNav.vue';
 import AccountPage from '../components/AccountPage.vue'
+import NotifComponent from '../components/NotifComponent.vue'
 
 export default {
   components: {
-    TopNav, AccountPage
+    TopNav, AccountPage, NotifComponent
   }
 }
 </script>
@@ -12,4 +13,5 @@ export default {
 <template>
     <TopNav></TopNav>
     <AccountPage></AccountPage>
+    <NotifComponent></NotifComponent>
 </template>

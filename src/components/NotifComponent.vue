@@ -1,14 +1,16 @@
 <template>
-    <div>
+    <div class="d-flex flex-row bd-highlight mb-3">
         <h6>You've been invited!</h6>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Click to join!
         </button>
     </div>
 
-    <div>
+    <div class="d-flex flex-row bd-highlight mb-3">
         <h6>You've just sent an invitation!</h6>
-        <button>Click to view</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Click to join!
+        </button>
     </div>
 
 
