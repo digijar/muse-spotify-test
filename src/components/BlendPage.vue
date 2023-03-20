@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 import Upload from './Uploads.vue'
 import InviteFriend from '../components/InviteFriend.vue'
 
@@ -7,15 +7,13 @@ export default {
     Upload, InviteFriend
   }
 }
-</script>
+</script> -->
 
 <template>
     <h1>Craft the ultimate playlist</h1>
     <h5>With your friends.</h5>
     <h3>should we be considering the scenario where there are multiple ongoing groups? if so then maybe the first page in this section would be for them to choose the available group.</h3>
 
-    <Upload></Upload>
-    <InviteFriend></InviteFriend>
 
     <!-- <div style="position: relative; top: 400px;">
         <h5>Your Playlist</h5>
