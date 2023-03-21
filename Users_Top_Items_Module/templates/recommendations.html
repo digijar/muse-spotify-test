@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist Recommendations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generate a Playlist Recommendation</h1>
+    <form id="recommendation-form">
+        <label for="playlist1">Playlist ID 1:</label>
+        <input type="text" id="playlist1" name="playlist1" required><br><br>
+        <label for="playlist2">Playlist ID 2:</label>
+        <input type="text" id="playlist2" name="playlist2"><br><br>
+        <label for="playlist3">Playlist ID 3:</label>
+        <input type="text" id="playlist3" name="playlist3"><br><br>
+        <label for="playlist4">Playlist ID 4:</label>
+        <input type="text" id="playlist4" name="playlist4"><br><br>
+        <label for="playlist5">Playlist ID 5:</label>
+        <input type="text" id="playlist5" name="playlist5"><br><br>
+        <button type="submit">Generate Playlist Recommendation</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        const form = document.getElementById("recommendation-form");
+        const result = document.getElementById("result");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const playlistIds = [
+                form.playlist1.value,
+                form.playlist2.value,
+                form.playlist3.value,
+                form.playlist4.value,
+                form.playlist5.value,
+            ].filter(id => id);
+
+            const response = await fetch('/generate_recommendations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer {{ access_token }}`,
+                },
+                body: JSON.stringify({ playlist_ids: playlistIds }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                result.textContent = `Recommended playlist created: ${data.name}`;
+            } else {
+                result.textContent = 'An error occurred while creating the recommended playlist.';
+            }
+        });
+    </script>
+</body>
+</html>
