@@ -1,7 +1,7 @@
 @import './base.css';
 
 * {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Inter" ,"Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: bold;
 }
 
@@ -127,7 +127,7 @@ div {
 }
 
 #id {
-  background-image: url('../src/assets/muse_background.png');
+  background-image: url('../src/assets/muse_background.jpg');
   height: 100%;
 }
 
