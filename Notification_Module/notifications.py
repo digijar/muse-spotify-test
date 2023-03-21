@@ -13,7 +13,7 @@ from twilio.rest import Client
 
 # retrieving API Key from .env file
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv('twillo_api_keys.env')
 
 API_KEY = os.getenv('SENDGRID_API_KEY')
 account_sid = os.getenv('TWILLO_ACCOUNT_SID')
