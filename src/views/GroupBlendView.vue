@@ -38,9 +38,6 @@ export default {
         </div>
     </div>
 
-    <div>
-        the things below should be on a separate page that takes in data dynamically
-    </div>
 </template>
 
 
