@@ -29,3 +29,4 @@ coverage
 
 # for API KEYS
 twillo_api_keys.env
+spotify_api_keys.env
