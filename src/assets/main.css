@@ -127,7 +127,7 @@ div {
 }
 
 #id {
-  background-image: url('../src/assets/muse_background.jpg');
+  background-image: url('/muse_background.jpg');
   height: 100%;
 }
 
