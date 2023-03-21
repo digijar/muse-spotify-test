@@ -28,4 +28,4 @@ coverage
 *.sw?
 
 # for API KEYS
-.env
+twillo_api_keys.env
