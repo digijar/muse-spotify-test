@@ -19,3 +19,5 @@ export default {
     <Uploads></Uploads>
     <InviteFriend></InviteFriend>
 </template>
+
+

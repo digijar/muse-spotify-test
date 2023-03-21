@@ -19,7 +19,7 @@
                                 <p class="small"><a class="text-primary" href="forget-password.html">Forgot password?</a>
                                 </p>
                                 <div class="d-grid">
-                                    <RouterLink to="/blend">
+                                    <RouterLink to="/groupblend">
                                         <button class="btn btn-outline-dark" type="submit">Login</button>
                                     </RouterLink>
                                 </div>

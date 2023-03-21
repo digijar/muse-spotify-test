@@ -17,7 +17,7 @@
                   <input type="password" class="form-control" id="password" placeholder="*******">
                 </div>
                 <div class="d-grid">
-                  <RouterLink to="/blend">
+                  <RouterLink to="/groupblend">
                     <button class="btn btn-outline-dark" type="submit">Sign Up</button>
                   </RouterLink>
                 </div>
