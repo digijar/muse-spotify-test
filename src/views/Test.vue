@@ -3,6 +3,9 @@
     <!-- {{ test.text }} -->
 </template>
 
+<script>
+</script>
+
 <!-- <script>
 import testData from '../components/test.json'
 import { useRoute } from 'vue-router';
