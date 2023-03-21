@@ -166,7 +166,7 @@ def generate_recommendations():
         new_playlist_response = requests.post(
             f'https://api.spotify.com/v1/users/{user_id}/playlists',
             headers=headers,
-            json={"name": "Recommended Playlist {playlist_randnum}", 
+            json={"name": f"Recommended Playlist {playlist_randnum}", 
                   "description": "trying not to break the Spotify API",
                   "public": "true"}
         )
@@ -176,38 +176,52 @@ def generate_recommendations():
 
         new_playlist = new_playlist_response.json()
 
+        # Extract tracks from input playlists
+        all_tracks = []
+        for playlist_id in playlist_ids:
+            tracks = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers).json()
+            all_tracks.extend(tracks['items'])
+
         # Extract artist IDs from the input playlist tracks
         artist_ids = list(set([track['track']['artists'][0]['id'] for track in all_tracks]))
 
         # Fetch genres associated with the artists
         seed_genres = []
         for i in range(0, len(artist_ids), 50):
-            artists_data = requests.get(
+            response = requests.get(
                 f'https://api.spotify.com/v1/artists?ids={",".join(artist_ids[i:i+50])}',
                 headers=headers
-            ).json()
-            for artist in artists_data['artists']:
-                seed_genres.extend(artist['genres'])
+            )
+            try:
+                artists_data = response.json()
+            except requests.exceptions.JSONDecodeError:
+                print(f"Error decoding JSON response: {response.text}")
+                continue
 
-        # Remove duplicate genres
-        seed_genres = list(set(seed_genres))
-
-        # Extract tracks from input playlists
-        all_tracks = []
-        for playlist_id in playlist_ids:
-            tracks = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers).json()
-            all_tracks.extend([track['track']['id'] for track in tracks['items']])
+            if 'artists' in artists_data:
+                for artist in artists_data['artists']:
+                    seed_genres.extend(artist['genres'])
+            else:
+                print(f"Unexpected response format: {artists_data}")
+                # Remove duplicate genres
+                seed_genres = list(set(seed_genres))
 
         # Generate recommendations based on input playlist tracks
         recommended_tracks = requests.get(
             'https://api.spotify.com/v1/recommendations',
-            headers=headers,
             params={
-                'seed_tracks': ','.join(random.sample(all_tracks, min(len(all_tracks), 5))),
                 'seed_genres': ','.join(random.sample(seed_genres, min(len(seed_genres), 5))),
-                'limit': 20
-            }
+                'seed_tracks': ','.join(random.sample([track['track']['id'] for track in all_tracks], min(len(all_tracks), 5))),
+                # 'seed_artists': ','.join(random.sample(artist_ids, min(len(artist_ids), 5))),
+                'limit': 50,
+            },
+            headers=headers
         ).json()
+
+        if 'tracks' not in recommended_tracks:
+            print(f"Unexpected response format: {recommendations}")
+
+            return jsonify({"code": 500, "message": "An error occurred while fetching recommendations."}), 500
 
         # Add recommended tracks to the new playlist
         track_uris = [track['uri'] for track in recommended_tracks['tracks']]
