@@ -167,8 +167,8 @@ def generate_recommendations():
             f'https://api.spotify.com/v1/users/{user_id}/playlists',
             headers=headers,
             json={"name": f"Recommended Playlist {playlist_randnum}", 
-                  "description": "trying not to break the Spotify API",
-                  "public": "true"}
+                    "description": "trying not to break the Spotify API",
+                    "public": "true"}
         )
         if new_playlist_response.status_code != 201:
             print("Error creating playlist:", new_playlist_response.status_code, new_playlist_response.text)
@@ -178,9 +178,17 @@ def generate_recommendations():
 
         # Extract tracks from input playlists
         all_tracks = []
+        
         for playlist_id in playlist_ids:
-            tracks = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers).json()
-            all_tracks.extend(tracks['items'])
+            tracks_response = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers)
+            if tracks_response.status_code != 200:
+                print("Error getting tracks:", tracks_response.status_code, tracks_response.text)
+                return jsonify({"code": 500, "message": "An error occurred while getting tracks."}), 500
+            else:
+                tracks = tracks_response.json()
+                all_tracks.extend(tracks['items'])
+
+
 
         # Extract artist IDs from the input playlist tracks
         artist_ids = list(set([track['track']['artists'][0]['id'] for track in all_tracks]))
@@ -210,16 +218,16 @@ def generate_recommendations():
         recommended_tracks = requests.get(
             'https://api.spotify.com/v1/recommendations',
             params={
-                'seed_genres': ','.join(random.sample(seed_genres, min(len(seed_genres), 5))),
-                'seed_tracks': ','.join(random.sample([track['track']['id'] for track in all_tracks], min(len(all_tracks), 5))),
-                # 'seed_artists': ','.join(random.sample(artist_ids, min(len(artist_ids), 5))),
-                'limit': 50,
+                'seed_genres': ','.join(random.sample(seed_genres, min(len(seed_genres), 3))),
+                'seed_tracks': ','.join(random.sample([track['track']['id'] for track in all_tracks], min(len(all_tracks), 1))),
+                'seed_artists': ','.join(random.sample(artist_ids, min(len(artist_ids), 1))),
+                'limit': 50
             },
             headers=headers
         ).json()
 
         if 'tracks' not in recommended_tracks:
-            print(f"Unexpected response format: {recommendations}")
+            print(f"Unexpected response format")
 
             return jsonify({"code": 500, "message": "An error occurred while fetching recommendations."}), 500
 
@@ -231,7 +239,7 @@ def generate_recommendations():
             json={"uris": track_uris}
         )
 
-        return jsonify({"name": new_playlist["name"]})
+        return jsonify({"name": new_playlist["name"], "link": new_playlist["external_urls"]["spotify"]})
     else:
         return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
 
