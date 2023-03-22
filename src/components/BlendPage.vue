@@ -4,7 +4,7 @@
   <br><br>
   <div class="m-4">
     <div>
-      <h2>{{ typingText }}</h2>
+      <h2 class="pt-3">{{ typingText }}</h2>
       <h4 id="typingeffect" style="color: grey">{{ subtitle }}</h4>
     </div>
   </div>
@@ -58,7 +58,7 @@ export default {
           clearInterval(typingInterval)
           setTimeout(() => {
             this.showCard = true
-          }, 1500)
+          }, 1000)
         }
       }, 50)
     }

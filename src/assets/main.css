@@ -5,10 +5,6 @@
   font-weight: 700;
 }
 
-h1, h2, h3 {
-  font-weight: 900;
-}
-
 span {
   color: black;
   margin-left: 10px;
@@ -43,8 +39,8 @@ div {
 }
 
 .card-block {
-  height: 230px;
-  width: 230px;
+  height: 280px;
+  width: 280px;
   margin: 0px;
   background-color: #fff;
   border: none;
@@ -60,8 +56,8 @@ div {
 }
 
 .card-block-round {
-  height: 230px;
-  width: 230px;
+  height: 280px;
+  width: 280px;
   margin: 0px;
   background-color: #fff;
   border: none;
@@ -171,14 +167,14 @@ h4 {
   color: #282828;
 }
 
-h5.title {
-  font-size: 18px;
+h4.title {
+  font-size: 25.89px;
   font-weight: 600;
   color: #282828;
 }
 
-h5.sub-title-1 {
-  font-size: 18px;
+h4.sub-title-1 {
+  font-size: 25.89px;
   font-weight: 400;
   color: #282828;
 }

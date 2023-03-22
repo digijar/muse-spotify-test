@@ -2,35 +2,744 @@
 export default {
   data() {
     return {
-      dummy_songs: [
-        ["Kill Bill", "SZA", "69 plays"],
-        ["Flowers", "Miley Cyrus", "57 plays"],
-        ["The Most Beautiful Thing", "Bruno Major", "49 Plays"],
-        ["As It Was", "Harry Styles", "35 plays"],
-        ["fifth song", "idk who", "50 plays"],
-      ],
-      top_tracks: {
-
+      result: {
+        "items": [
+          {
+            "album": {
+              "album_type": "ALBUM",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/7nzSoJISlVJsn7O0yTeMOB"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/7nzSoJISlVJsn7O0yTeMOB",
+                  "id": "7nzSoJISlVJsn7O0yTeMOB",
+                  "name": "Joe Hisaishi",
+                  "type": "artist",
+                  "uri": "spotify:artist:7nzSoJISlVJsn7O0yTeMOB"
+                }
+              ],
+              "available_markets": [
+                "AD",
+                "AE",
+                "AR",
+                "AT",
+                "AU",
+                "BE",
+                "BG",
+                "BH",
+                "BO",
+                "BR",
+                "CA",
+                "CH",
+                "CL",
+                "CO",
+                "CR",
+                "CY",
+                "CZ",
+                "DE",
+                "DK",
+                "DO",
+                "DZ",
+                "EC",
+                "EE",
+                "EG",
+                "ES",
+                "FI",
+                "FR",
+                "GB",
+                "GR",
+                "GT",
+                "HK",
+                "HN",
+                "HU",
+                "ID",
+                "IE",
+                "IL",
+                "IN",
+                "IS",
+                "IT",
+                "JO",
+                "KW",
+                "LB",
+                "LI",
+                "LT",
+                "LU",
+                "LV",
+                "MA",
+                "MC",
+                "MT",
+                "MX",
+                "MY",
+                "NI",
+                "NL",
+                "NO",
+                "NZ",
+                "OM",
+                "PA",
+                "PE",
+                "PH",
+                "PL",
+                "PS",
+                "PT",
+                "PY",
+                "QA",
+                "RO",
+                "SA",
+                "SE",
+                "SG",
+                "SK",
+                "SV",
+                "TH",
+                "TN",
+                "TR",
+                "TW",
+                "US",
+                "UY",
+                "VN",
+                "ZA"
+              ],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/2ZHxPDTCRU5STetdmXeW6p"
+              },
+              "href": "https://api.spotify.com/v1/albums/2ZHxPDTCRU5STetdmXeW6p",
+              "id": "2ZHxPDTCRU5STetdmXeW6p",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b273b8ca4003c6774ffad9ee23e6",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e02b8ca4003c6774ffad9ee23e6",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d00004851b8ca4003c6774ffad9ee23e6",
+                  "width": 64
+                }
+              ],
+              "name": "Princess Mononoke Soundtrack",
+              "release_date": "1997-07-02",
+              "release_date_precision": "day",
+              "total_tracks": 33,
+              "type": "album",
+              "uri": "spotify:album:2ZHxPDTCRU5STetdmXeW6p"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/7nzSoJISlVJsn7O0yTeMOB"
+                },
+                "href": "https://api.spotify.com/v1/artists/7nzSoJISlVJsn7O0yTeMOB",
+                "id": "7nzSoJISlVJsn7O0yTeMOB",
+                "name": "Joe Hisaishi",
+                "type": "artist",
+                "uri": "spotify:artist:7nzSoJISlVJsn7O0yTeMOB"
+              }
+            ],
+            "available_markets": [
+              "AD",
+              "AE",
+              "AR",
+              "AT",
+              "AU",
+              "BE",
+              "BG",
+              "BH",
+              "BO",
+              "BR",
+              "CA",
+              "CH",
+              "CL",
+              "CO",
+              "CR",
+              "CY",
+              "CZ",
+              "DE",
+              "DK",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "ES",
+              "FI",
+              "FR",
+              "GB",
+              "GR",
+              "GT",
+              "HK",
+              "HN",
+              "HU",
+              "ID",
+              "IE",
+              "IL",
+              "IN",
+              "IS",
+              "IT",
+              "JO",
+              "KW",
+              "LB",
+              "LI",
+              "LT",
+              "LU",
+              "LV",
+              "MA",
+              "MC",
+              "MT",
+              "MX",
+              "MY",
+              "NI",
+              "NL",
+              "NO",
+              "NZ",
+              "OM",
+              "PA",
+              "PE",
+              "PH",
+              "PL",
+              "PS",
+              "PT",
+              "PY",
+              "QA",
+              "RO",
+              "SA",
+              "SE",
+              "SG",
+              "SK",
+              "SV",
+              "TH",
+              "TN",
+              "TR",
+              "TW",
+              "US",
+              "UY",
+              "VN",
+              "ZA"
+            ],
+            "disc_number": 1,
+            "duration_ms": 128373,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "JPTK09780818"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/0KeqW4my39At2Ke1mVFYBF"
+            },
+            "href": "https://api.spotify.com/v1/tracks/0KeqW4my39At2Ke1mVFYBF",
+            "id": "0KeqW4my39At2Ke1mVFYBF",
+            "is_local": false,
+            "name": "Princess Mononoke Theme Song",
+            "popularity": 44,
+            "preview_url": "https://p.scdn.co/mp3-preview/cd906c1f9760653a24bbdc2aa91fadaf262aeb62?cid=774b29d4f13844c495f206cafdad9c86",
+            "track_number": 18,
+            "type": "track",
+            "uri": "spotify:track:0KeqW4my39At2Ke1mVFYBF"
+          },
+          {
+            "album": {
+              "album_type": "SINGLE",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/5fa13NJjmn2uQ3dxZDi2Ge"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/5fa13NJjmn2uQ3dxZDi2Ge",
+                  "id": "5fa13NJjmn2uQ3dxZDi2Ge",
+                  "name": "Bich Phuong",
+                  "type": "artist",
+                  "uri": "spotify:artist:5fa13NJjmn2uQ3dxZDi2Ge"
+                }
+              ],
+              "available_markets": [],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/0JoA8Z6TWI31c6uWXldxyU"
+              },
+              "href": "https://api.spotify.com/v1/albums/0JoA8Z6TWI31c6uWXldxyU",
+              "id": "0JoA8Z6TWI31c6uWXldxyU",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b2734ff4ae8820513dc663f1006a",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e024ff4ae8820513dc663f1006a",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d000048514ff4ae8820513dc663f1006a",
+                  "width": 64
+                }
+              ],
+              "name": "tâm trạng tan hơi chậm một chút",
+              "release_date": "2018-03-01",
+              "release_date_precision": "day",
+              "total_tracks": 4,
+              "type": "album",
+              "uri": "spotify:album:0JoA8Z6TWI31c6uWXldxyU"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/5fa13NJjmn2uQ3dxZDi2Ge"
+                },
+                "href": "https://api.spotify.com/v1/artists/5fa13NJjmn2uQ3dxZDi2Ge",
+                "id": "5fa13NJjmn2uQ3dxZDi2Ge",
+                "name": "Bich Phuong",
+                "type": "artist",
+                "uri": "spotify:artist:5fa13NJjmn2uQ3dxZDi2Ge"
+              }
+            ],
+            "available_markets": [],
+            "disc_number": 1,
+            "duration_ms": 208695,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "VNA0M1907691"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/2LKI0fGEKR3RWAiY2jqq8k"
+            },
+            "href": "https://api.spotify.com/v1/tracks/2LKI0fGEKR3RWAiY2jqq8k",
+            "id": "2LKI0fGEKR3RWAiY2jqq8k",
+            "is_local": false,
+            "name": "Một Cú Lừa",
+            "popularity": 0,
+            "preview_url": null,
+            "track_number": 2,
+            "type": "track",
+            "uri": "spotify:track:2LKI0fGEKR3RWAiY2jqq8k"
+          },
+          {
+            "album": {
+              "album_type": "SINGLE",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/4VbAtGhXMJr2AGXa8fkcRu"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/4VbAtGhXMJr2AGXa8fkcRu",
+                  "id": "4VbAtGhXMJr2AGXa8fkcRu",
+                  "name": "I-LAND",
+                  "type": "artist",
+                  "uri": "spotify:artist:4VbAtGhXMJr2AGXa8fkcRu"
+                }
+              ],
+              "available_markets": [],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/5sDl9lSChCR6f1CY8EsAsL"
+              },
+              "href": "https://api.spotify.com/v1/albums/5sDl9lSChCR6f1CY8EsAsL",
+              "id": "5sDl9lSChCR6f1CY8EsAsL",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b2737be0fa7a6e19b0eeeb6c4407",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e027be0fa7a6e19b0eeeb6c4407",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d000048517be0fa7a6e19b0eeeb6c4407",
+                  "width": 64
+                }
+              ],
+              "name": "Into the I-Land",
+              "release_date": "2020-06-26",
+              "release_date_precision": "day",
+              "total_tracks": 1,
+              "type": "album",
+              "uri": "spotify:album:5sDl9lSChCR6f1CY8EsAsL"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/4VbAtGhXMJr2AGXa8fkcRu"
+                },
+                "href": "https://api.spotify.com/v1/artists/4VbAtGhXMJr2AGXa8fkcRu",
+                "id": "4VbAtGhXMJr2AGXa8fkcRu",
+                "name": "I-LAND",
+                "type": "artist",
+                "uri": "spotify:artist:4VbAtGhXMJr2AGXa8fkcRu"
+              }
+            ],
+            "available_markets": [],
+            "disc_number": 1,
+            "duration_ms": 217322,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "KRA492000740"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/0nTMrb8liUqXmEH9MZQqtV"
+            },
+            "href": "https://api.spotify.com/v1/tracks/0nTMrb8liUqXmEH9MZQqtV",
+            "id": "0nTMrb8liUqXmEH9MZQqtV",
+            "is_local": false,
+            "name": "Into the I-LAND - Applicants Version",
+            "popularity": 0,
+            "preview_url": null,
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:0nTMrb8liUqXmEH9MZQqtV"
+          },
+          {
+            "album": {
+              "album_type": "SINGLE",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/55fhWPvDiMpLnE4ZzNXZyW"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/55fhWPvDiMpLnE4ZzNXZyW",
+                  "id": "55fhWPvDiMpLnE4ZzNXZyW",
+                  "name": "Noah Cyrus",
+                  "type": "artist",
+                  "uri": "spotify:artist:55fhWPvDiMpLnE4ZzNXZyW"
+                }
+              ],
+              "available_markets": [
+                "SK"
+              ],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/71EPoeTo5QAlsr2OWCRNhM"
+              },
+              "href": "https://api.spotify.com/v1/albums/71EPoeTo5QAlsr2OWCRNhM",
+              "id": "71EPoeTo5QAlsr2OWCRNhM",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b2737aa8305cc058141d02c5f4c3",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e027aa8305cc058141d02c5f4c3",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d000048517aa8305cc058141d02c5f4c3",
+                  "width": 64
+                }
+              ],
+              "name": "I Burned LA Down",
+              "release_date": "2022-04-08",
+              "release_date_precision": "day",
+              "total_tracks": 1,
+              "type": "album",
+              "uri": "spotify:album:71EPoeTo5QAlsr2OWCRNhM"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/55fhWPvDiMpLnE4ZzNXZyW"
+                },
+                "href": "https://api.spotify.com/v1/artists/55fhWPvDiMpLnE4ZzNXZyW",
+                "id": "55fhWPvDiMpLnE4ZzNXZyW",
+                "name": "Noah Cyrus",
+                "type": "artist",
+                "uri": "spotify:artist:55fhWPvDiMpLnE4ZzNXZyW"
+              }
+            ],
+            "available_markets": [
+              "SK"
+            ],
+            "disc_number": 1,
+            "duration_ms": 195252,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "USQX92105689"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/34Mg7rSCT7nRsf1kVCAvgz"
+            },
+            "href": "https://api.spotify.com/v1/tracks/34Mg7rSCT7nRsf1kVCAvgz",
+            "id": "34Mg7rSCT7nRsf1kVCAvgz",
+            "is_local": false,
+            "name": "I Burned LA Down",
+            "popularity": 13,
+            "preview_url": "https://p.scdn.co/mp3-preview/8a288b1e6c4c259a195b280ae292b5feb58343da?cid=774b29d4f13844c495f206cafdad9c86",
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:34Mg7rSCT7nRsf1kVCAvgz"
+          },
+          {
+            "album": {
+              "album_type": "SINGLE",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/6RHTUrRF63xao58xh9FXYJ"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/6RHTUrRF63xao58xh9FXYJ",
+                  "id": "6RHTUrRF63xao58xh9FXYJ",
+                  "name": "IVE",
+                  "type": "artist",
+                  "uri": "spotify:artist:6RHTUrRF63xao58xh9FXYJ"
+                }
+              ],
+              "available_markets": [
+                "AD",
+                "AE",
+                "AR",
+                "AT",
+                "AU",
+                "BE",
+                "BG",
+                "BH",
+                "BO",
+                "BR",
+                "CA",
+                "CH",
+                "CL",
+                "CO",
+                "CR",
+                "CY",
+                "CZ",
+                "DE",
+                "DK",
+                "DO",
+                "DZ",
+                "EC",
+                "EE",
+                "EG",
+                "ES",
+                "FI",
+                "FR",
+                "GB",
+                "GR",
+                "GT",
+                "HK",
+                "HN",
+                "HU",
+                "ID",
+                "IE",
+                "IL",
+                "IN",
+                "IS",
+                "IT",
+                "JO",
+                "JP",
+                "KW",
+                "LB",
+                "LI",
+                "LT",
+                "LU",
+                "LV",
+                "MA",
+                "MC",
+                "MT",
+                "MX",
+                "MY",
+                "NI",
+                "NL",
+                "NO",
+                "NZ",
+                "OM",
+                "PA",
+                "PE",
+                "PH",
+                "PL",
+                "PS",
+                "PT",
+                "PY",
+                "QA",
+                "RO",
+                "SA",
+                "SE",
+                "SG",
+                "SK",
+                "SV",
+                "TH",
+                "TN",
+                "TR",
+                "TW",
+                "US",
+                "UY",
+                "VN",
+                "ZA"
+              ],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/1AFVTHHm7kKoQ6Rgb25x3p"
+              },
+              "href": "https://api.spotify.com/v1/albums/1AFVTHHm7kKoQ6Rgb25x3p",
+              "id": "1AFVTHHm7kKoQ6Rgb25x3p",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b2739016f58cc49e6473e1207093",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e029016f58cc49e6473e1207093",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d000048519016f58cc49e6473e1207093",
+                  "width": 64
+                }
+              ],
+              "name": "LOVE DIVE",
+              "release_date": "2022-04-05",
+              "release_date_precision": "day",
+              "total_tracks": 2,
+              "type": "album",
+              "uri": "spotify:album:1AFVTHHm7kKoQ6Rgb25x3p"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/6RHTUrRF63xao58xh9FXYJ"
+                },
+                "href": "https://api.spotify.com/v1/artists/6RHTUrRF63xao58xh9FXYJ",
+                "id": "6RHTUrRF63xao58xh9FXYJ",
+                "name": "IVE",
+                "type": "artist",
+                "uri": "spotify:artist:6RHTUrRF63xao58xh9FXYJ"
+              }
+            ],
+            "available_markets": [
+              "AD",
+              "AE",
+              "AR",
+              "AT",
+              "AU",
+              "BE",
+              "BG",
+              "BH",
+              "BO",
+              "BR",
+              "CA",
+              "CH",
+              "CL",
+              "CO",
+              "CR",
+              "CY",
+              "CZ",
+              "DE",
+              "DK",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "ES",
+              "FI",
+              "FR",
+              "GB",
+              "GR",
+              "GT",
+              "HK",
+              "HN",
+              "HU",
+              "ID",
+              "IE",
+              "IL",
+              "IN",
+              "IS",
+              "IT",
+              "JO",
+              "JP",
+              "KW",
+              "LB",
+              "LI",
+              "LT",
+              "LU",
+              "LV",
+              "MA",
+              "MC",
+              "MT",
+              "MX",
+              "MY",
+              "NI",
+              "NL",
+              "NO",
+              "NZ",
+              "OM",
+              "PA",
+              "PE",
+              "PH",
+              "PL",
+              "PS",
+              "PT",
+              "PY",
+              "QA",
+              "RO",
+              "SA",
+              "SE",
+              "SG",
+              "SK",
+              "SV",
+              "TH",
+              "TN",
+              "TR",
+              "TW",
+              "US",
+              "UY",
+              "VN",
+              "ZA"
+            ],
+            "disc_number": 1,
+            "duration_ms": 177186,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "KRA382204375"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/0Q5VnK2DYzRyfqQRJuUtvi"
+            },
+            "href": "https://api.spotify.com/v1/tracks/0Q5VnK2DYzRyfqQRJuUtvi",
+            "id": "0Q5VnK2DYzRyfqQRJuUtvi",
+            "is_local": false,
+            "name": "LOVE DIVE",
+            "popularity": 80,
+            "preview_url": "https://p.scdn.co/mp3-preview/ffeda0e70f8e10861d42135e1cee1c4ea949e09b?cid=774b29d4f13844c495f206cafdad9c86",
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:0Q5VnK2DYzRyfqQRJuUtvi"
+          }
+        ],
+        "total": 50,
+        "limit": 5,
+        "offset": 0,
+        "href": "https://api.spotify.com/v1/me/top/tracks?limit=5&offset=0&time_range=long_term",
+        "next": "https://api.spotify.com/v1/me/top/tracks?limit=5&offset=5&time_range=long_term",
+        "previous": null
       }
     }
   }
 }
 </script>
 
-
 <template>
   <div>
     <div class="m-4">
-      <h4 style="color: black">Top Songs</h4>
+      <h3 style="color: black">Top Songs</h3>
     </div>
     <div class="container-fluid">
       <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
-        <div v-for='list in dummy_songs' class="col">
-          <div class="card-1 card-block"></div>
+        <div v-for='track in result.items' class="col">
+          <div class="card-block">
+            <a :href="track.external_urls.spotify" target="_blank">
+              <img class="card-img-top" :src="track.album.images[0].url" :alt="track.album.name">
+            </a>
+          </div>
           <div>
-            <h5 class="title mt-3">{{ list[0] }}</h5>
-            <h5 class="sub-title-1 mt-1">{{ list[1] }}</h5>
-            <h6 class="sub-title-2 mt-2">{{ list[2] }}</h6>
+            <h4 class="title mt-3">{{ track.name.length > 16 ? track.name.substr(0, 16) + '...' : track.name }}</h4>
+            <h4 class="sub-title-1 mt-1">{{ track.artists[0].name }}</h4>
           </div>
         </div>
       </div>

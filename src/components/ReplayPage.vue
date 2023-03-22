@@ -3,14 +3,18 @@
 
   <div class="m-4">
     <div>
-      <h2>{{ typingText }}</h2>
-      <h4 id="typingeffect" style="color:grey">{{ typingSubtitle }}</h4>
+      <h2 class="pt-4">{{ typingText }}</h2>
+      <h3 id="typingeffect" style="color:grey">{{ typingSubtitle }}</h3>
     </div>
   </div>
 
-  <TopSongsCard v-if="showCards"></TopSongsCard>
-  <TopArtistsCard v-if="showCards"></TopArtistsCard>
-  <TopAlbumsCard v-if="showCards"></TopAlbumsCard>
+  <div class="pt-2">
+    <TopSongsCard v-if="showCards"></TopSongsCard>
+  </div>
+
+  <div class="pt-2">
+    <TopArtistsCard v-if="showCards"></TopArtistsCard>
+  </div>
 
   <br><br><br>
 </template>
@@ -18,11 +22,10 @@
 <script>
 import TopSongsCard from '../components/TopSongsCard.vue';
 import TopArtistsCard from '../components/TopArtistsCard.vue';
-import TopAlbumsCard from '../components/TopAlbumsCard.vue';
 
 export default {
   components: {
-    TopSongsCard, TopArtistsCard, TopAlbumsCard
+    TopSongsCard, TopArtistsCard
   },
   data() {
     return {
@@ -67,7 +70,7 @@ export default {
             this.typingComplete = true
             setTimeout(() => {
               this.showCardsAfterDelay = true
-            }, 1500)
+            }, 1000)
           }, 0)
         }
       }, 50)
