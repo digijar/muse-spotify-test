@@ -8,8 +8,6 @@ export default {
     TopNav, Uploads, InviteFriend
   }
 }
-
-
 </script>
 
 <template>
@@ -17,5 +15,3 @@ export default {
   <InviteFriend></InviteFriend>
   <Uploads></Uploads>
 </template>
-
-

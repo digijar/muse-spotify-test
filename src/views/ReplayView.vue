@@ -1,5 +1,3 @@
-
-
 <script>
 import TopNav from '../components/TopNav.vue';
 import ReplayPage from '../components/ReplayPage.vue';

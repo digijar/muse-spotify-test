@@ -10,6 +10,6 @@ export default {
 </script>
 
 <template>
-    <TopNav></TopNav>
-    <LoginPage></LoginPage>
+  <TopNav></TopNav>
+  <LoginPage></LoginPage>
 </template>

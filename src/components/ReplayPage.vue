@@ -8,12 +8,9 @@
     </div>
   </div>
 
-    <TopSongsCard></TopSongsCard>
-
-    <TopArtistsCard></TopArtistsCard>
-
-
-    <TopAlbumsCard></TopAlbumsCard>
+  <TopSongsCard v-if="showCards"></TopSongsCard>
+  <TopArtistsCard v-if="showCards"></TopArtistsCard>
+  <TopAlbumsCard v-if="showCards"></TopAlbumsCard>
 
   <br><br><br>
 </template>
@@ -22,27 +19,28 @@
 import TopSongsCard from '../components/TopSongsCard.vue';
 import TopArtistsCard from '../components/TopArtistsCard.vue';
 import TopAlbumsCard from '../components/TopAlbumsCard.vue';
-import HistoryCard from '../components/HistoryCard.vue'
 
 export default {
   components: {
-    TopSongsCard, TopArtistsCard, TopAlbumsCard, HistoryCard
+    TopSongsCard, TopArtistsCard, TopAlbumsCard
   },
   data() {
     return {
       typingText: '',
       typingSubtitle: '',
-      showCards: {
-        songs: false,
-        artists: false,
-        albums: false
-      },
+      typingComplete: false,
+      showCardsAfterDelay: false,
       refreshIntervalId: null
     }
   },
   mounted() {
     this.startRefresh()
     this.typeText()
+  },
+  computed: {
+    showCards() {
+      return this.typingComplete && this.showCardsAfterDelay
+    }
   },
   methods: {
     typeText() {
@@ -65,13 +63,12 @@ export default {
         index++
         if (index === text.length) {
           clearInterval(typingInterval)
-          this.showCards.songs = true
           setTimeout(() => {
-            this.showCards.artists = true
-          }, 1000)
-          setTimeout(() => {
-            this.showCards.albums = true
-          }, 2000)
+            this.typingComplete = true
+            setTimeout(() => {
+              this.showCardsAfterDelay = true
+            }, 1500)
+          }, 0)
         }
       }, 50)
     },
