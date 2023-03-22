@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="m-4">
-      <h3 style="color: black">Top Songs</h3>
+      <h3 style="color: black">Top Tracks</h3>
     </div>
     <div class="container-fluid">
       <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
@@ -12,8 +12,8 @@
             </a>
           </div>
           <div>
-            <h4 class="title mt-3">{{ track.name.length > 16 ? track.name.substr(0, 16) + '...' : track.name }}</h4>
-            <h4 class="sub-title-1 mt-1">{{ track.artists[0].name }}</h4>
+            <h4 class="title mt-4">{{ track.name.length > 16 ? track.name.substr(0, 16) + '...' : track.name }}</h4>
+            <h5 class="sub-title mt-2">{{ track.artists[0].name }}</h5>
           </div>
         </div>
         <div class="col d-flex align-items-center" v-if="itemsToShow.length < result.items.length">

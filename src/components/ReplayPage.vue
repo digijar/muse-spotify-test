@@ -9,7 +9,7 @@
   </div>
 
   <div class="pt-2">
-    <TopSongsCard v-if="showCards"></TopSongsCard>
+    <TopTracksCard v-if="showCards"></TopTracksCard>
   </div>
 
   <div class="pt-2">
@@ -20,12 +20,12 @@
 </template>
 
 <script>
-import TopSongsCard from '../components/TopSongsCard.vue';
+import TopTracksCard from './TopTracksCard.vue';
 import TopArtistsCard from '../components/TopArtistsCard.vue';
 
 export default {
   components: {
-    TopSongsCard, TopArtistsCard
+    TopTracksCard, TopArtistsCard
   },
   data() {
     return {
