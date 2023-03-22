@@ -2,7 +2,11 @@
 
 * {
   font-family: "Inter" ,"Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: bold;
+  font-weight: 700;
+}
+
+h1, h2, h3 {
+  font-weight: 900;
 }
 
 span {
