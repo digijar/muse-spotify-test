@@ -56,7 +56,7 @@
             if (response.ok) {
                 const data = await response.json();
                 result.innerHTML = `Recommended playlist created: ${data.name} <br>
-                This is the link <a href='${data.link}'>Link</a>`;
+                This is the link <a href='${data.link}' target='_blank'>Link</a>`;
             } else {
                 result.textContent = 'An error occurred while creating the recommended playlist.';
             }
