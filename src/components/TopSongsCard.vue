@@ -2,18 +2,19 @@
 export default {
   data() {
     return {
-      test: ["hello", "2"],
       dummy_songs: [
         ["Kill Bill", "SZA", "69 plays"],
         ["Flowers", "Miley Cyrus", "57 plays"],
         ["The Most Beautif...", "Bruno Major", "49 Plays"],
         ["As It Was", "Harry Styles", "35 plays"],
         ["fifth song", "idk who", "50 plays"],
-      ]
+      ],
+      top_tracks: {
+        
+      }
     }
   }
 }
-
 </script>
 
 
