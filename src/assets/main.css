@@ -147,8 +147,18 @@ h5 {
   border-width: 2px;
 }
 
-h6 {
-  margin: 2px 0;
+h5.title {
+  font-weight: 600;
+  color: #282828;
+}
+
+h5.sub-title-1 {
+  font-weight: 400;
+  color: #282828;
+}
+
+h6.sub-title-2 {
+  font-weight: 400;
 }
 
 h3{

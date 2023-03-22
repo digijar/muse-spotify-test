@@ -23,9 +23,9 @@ export default {
         <div v-for='list in dummy_albums' class="col">
           <div class="card-3 card-block"></div>
           <div>
-            <h6>{{ list[0] }}</h6>
-            <h6 style="font-weight:400">{{ list[1] }}</h6>
-            <h6 style="font-weight:400; color: grey">{{ list[2] }}</h6>
+            <h5 class="title mt-3">{{ list[0] }}</h5>
+            <h5 class="sub-title-1 mt-1">{{ list[1] }}</h5>
+            <h6 class="sub-title-2 mt-2">{{ list[2] }}</h6>
           </div>
 
         </div>
