@@ -7,7 +7,7 @@
         </router-link>
       </div>
       <div>
-        <router-link to="/blend">
+        <router-link to="/groupblend">
           <span class="nav_item active">blend</span>
         </router-link>
         <router-link to="/replay">
