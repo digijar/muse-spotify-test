@@ -5,7 +5,7 @@ export default {
       dummy_songs: [
         ["Kill Bill", "SZA", "69 plays"],
         ["Flowers", "Miley Cyrus", "57 plays"],
-        ["The Most Beautif...", "Bruno Major", "49 Plays"],
+        ["The Most Beautiful Thing", "Bruno Major", "49 Plays"],
         ["As It Was", "Harry Styles", "35 plays"],
         ["fifth song", "idk who", "50 plays"],
       ],
@@ -21,10 +21,10 @@ export default {
 <template>
   <div>
     <div class="m-4">
-      <h2 style="color: black">Top Songs</h2>
+      <h4 style="color: black">Top Songs</h4>
     </div>
     <div class="container-fluid">
-      <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">
+      <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
         <div v-for='list in dummy_songs' class="col">
           <div class="card-1 card-block"></div>
           <div>

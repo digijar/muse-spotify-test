@@ -18,10 +18,10 @@ export default {
 <template>
   <div>
     <div class="m-4">
-      <h2 style="color: black">Top Albums</h2>
+      <h4 style="color: black">Top Albums</h4>
     </div>
     <div class="container-fluid">
-      <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">
+      <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
         <div v-for='list in dummy_albums' class="col">
           <div class="card-3 card-block"></div>
           <div>

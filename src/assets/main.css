@@ -147,9 +147,27 @@ h5 {
   border-width: 2px;
 }
 
-h0 {
-  font-size: 96px;
-  font-weight: 900;
+h1 {
+  font-size: 109.66px;
+  font-weight: 800;
+  color: #282828;
+}
+
+h2 {
+  font-size: 67.78px;
+  font-weight: 700;
+  color: #282828;
+}
+
+h3 {
+  font-size: 41.89px;
+  font-weight: 600;
+  color: #282828;
+}
+
+h4 {
+  font-size: 25.89px;
+  font-weight: 600;
   color: #282828;
 }
 
