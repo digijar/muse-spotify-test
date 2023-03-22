@@ -17,15 +17,17 @@ export default {
 </script>
 
 <template>
-  <div>
-    <h5 style="color: black">Top Artists</h5>
+ <div>
+    <div class="m-4">
+      <h2 style="color: black">Top Artists</h2>
+    </div>
     <div class="container-fluid">
       <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">
         <div v-for='list in dummy_artists' class="col">
           <div class="card-block-round card-2 text-center"></div>
           <div class="text-center">
-            <h6>{{ list[0] }}</h6>
-            <h6 style="font-weight:400; color: grey">{{ list[1] }}</h6>
+            <h5 class="title mt-3">{{ list[0] }}</h5>
+            <h6 class="sub-title-2 mt-2">{{ list[1] }}</h6>
           </div>
         </div>
       </div>

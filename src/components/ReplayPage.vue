@@ -14,9 +14,9 @@ export default {
 </script>
 
 <template>
-  <div>
-    <h1>Explore your listening</h1>
-    <h5 style="color: grey">As of this week.</h5>
+  <div class="m-4">
+    <h0>Explore your listening</h0>
+    <h2 style="color: grey">as of this week.</h2>
   </div>
 
 
