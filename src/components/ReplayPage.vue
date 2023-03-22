@@ -59,7 +59,7 @@ export default {
       }, 50)
     },
     typeSubtitle() {
-      const text = 'as of this week.'
+      const text = 'for this month.'
       let index = 0
       const typingInterval = setInterval(() => {
         this.typingSubtitle += text[index]
