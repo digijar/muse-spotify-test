@@ -18,21 +18,17 @@
                   </div>
 
                   <div v-if="personalUpload && groupStatus == 'waiting'">
-                    <button class="">change your playlist?</button>
+                    <button class="" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
+                      playlist?</button>
                   </div>
                 </div>
               </div>
               <!-- add more card elements here as needed -->
             </div>
-
-
           </div>
-
-
         </div>
-
-
       </div>
+
 
       <div v-else>
 
@@ -111,6 +107,29 @@
     </div>
 
 
+    <!-- modal -->
+    <div class="modal fade" id="changeBtnModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="btn1ModalLabel">New playlist</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Playlist URL</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
