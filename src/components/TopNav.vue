@@ -13,13 +13,12 @@
         <router-link to="/replay">
           <span class="nav_item" style="font-size: 25.89px; font-weight: 800;">replay</span>
         </router-link>
-        <router-link to="/account">
-          <span><i class="bi bi-person-circle">icon</i></span>
-        </router-link>
+
+        <span>Account</span>
+
       </div>
 
     </div>
   </nav>
   <hr class="solid" style="height: 2px; border-top: 2px solid black; margin: 0px; padding: 0px">
-
 </template>

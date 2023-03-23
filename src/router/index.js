@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ReplayView from '../views/ReplayView.vue'
 import BlendView from '../views/BlendView.vue'
 import LoginView from '../views/LoginView.vue'
-import AccountView from '../views/AccountView.vue'
+// import AccountView from '../views/AccountView.vue'
 import LoginAuthView from '../views/LoginAuthView.vue'
 import SignUpView from '../views/SignUpView.vue'
 import Test from '../views/Test.vue'
@@ -26,11 +26,6 @@ const router = createRouter({
       path: '/blend',
       name: 'blend',
       component: BlendView
-    },
-    {
-      path: '/account',
-      name: 'account',
-      component: AccountView
     },
     {
       path: '/loginauth',
