@@ -1,6 +1,11 @@
 <template>
   <div>
 
+    <br>
+    <br>
+    <br>
+
+
     <div>
       <div v-if="personalUpload">
         <div class="container mt-4">
@@ -31,7 +36,6 @@
 
 
       <div v-else>
-
         <div class="container mt-4">
           <div class="text-center">
             <h5>Upload your playlist!</h5>

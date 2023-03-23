@@ -6,7 +6,10 @@ import InviteFriend from '../components/InviteFriend.vue'
 export default {
   components: {
     TopNav, Uploads, InviteFriend
-  }
+  },
+  // methods:{
+  //   toggleUserView = ()
+  // }
 }
 </script>
 

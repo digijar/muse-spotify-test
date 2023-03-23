@@ -44,8 +44,20 @@
       </div>
     </div>
   </div>
+
+  <!-- <div v-if="UserDetails" @click="toggleUserView(UserDetails.name, UserDetails.id)">
+
+  </div> -->
 </template>
 
 <script>
+
+// export default{
+//   props:['UserDetails'],
+
+//   methods:{
+//     toggleUserView = router.push(UserDetails)
+//   }
+// }
 
 </script>
