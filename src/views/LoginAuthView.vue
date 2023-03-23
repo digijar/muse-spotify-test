@@ -4,12 +4,14 @@ import LoginAuthPage from '../components/LoginAuthPage.vue';
 
 export default {
   components: {
-    LoginAuthPage, TopNav
+    TopNav, LoginAuthPage
   }
 }
 </script>
 
 <template>
-  <TopNav></TopNav>
-  <LoginAuthPage></LoginAuthPage>
+  <div>
+    <TopNav></TopNav>
+    <LoginAuthPage></LoginAuthPage>
+  </div>
 </template>

@@ -4,12 +4,14 @@ import TopNav from '../components/TopNav.vue'
 
 export default {
   components: {
-    LoginPage, TopNav
+    TopNav, LoginPage
   }
 }
 </script>
 
 <template>
-  <TopNav></TopNav>
-  <LoginPage></LoginPage>
+  <div>
+    <TopNav></TopNav>
+    <LoginPage></LoginPage>
+  </div>
 </template>

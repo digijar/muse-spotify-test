@@ -10,6 +10,9 @@ export default {
 </script>
 
 <template>
-  <TopNav></TopNav>
-  <BlendPage></BlendPage>
+  <div>
+    <TopNav></TopNav>
+    <BlendPage></BlendPage>
+  </div>
 </template>
+

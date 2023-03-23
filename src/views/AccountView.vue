@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-    <TopNav></TopNav>
-    <AccountPage></AccountPage>
-    <NotifComponent></NotifComponent>
+  <TopNav></TopNav>
+  <AccountPage></AccountPage>
+  <NotifComponent></NotifComponent>
 </template>

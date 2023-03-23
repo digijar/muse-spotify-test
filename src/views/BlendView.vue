@@ -11,7 +11,9 @@ export default {
 </script>
 
 <template>
-  <TopNav></TopNav>
-  <InviteFriend></InviteFriend>
-  <Uploads></Uploads>
+  <div>
+    <TopNav></TopNav>
+    <Uploads></Uploads>
+    <InviteFriend></InviteFriend>
+  </div>
 </template>

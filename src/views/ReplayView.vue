@@ -10,6 +10,8 @@ export default {
 </script>
 
 <template>
-  <TopNav></TopNav>
-  <ReplayPage></ReplayPage>
+  <div>
+    <TopNav></TopNav>
+    <ReplayPage></ReplayPage>
+  </div>
 </template>
