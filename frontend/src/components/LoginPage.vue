@@ -59,56 +59,56 @@ export default {
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      isLoggedIn: false,
-      user: null
-    }
-  },
-  methods: {
-    login() {
-      window.location.href = 'http://127.0.0.1:2504/api/v1/login'
-    },
-    logout() {
-      fetch('http://127.0.0.1:2504/api/v1/logout')
-        .then(response => response.json())
-        .then(data => {
-          this.isLoggedIn = false
-          this.user = null
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    getUserProfile() {
-      fetch('http://127.0.0.1:2504/api/v1/me')
-        .then(response => response.json())
-        .then(data => {
-          this.isLoggedIn = true
-          this.user = data
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    },
-    check() {
-      fetch('http://127.0.0.1:2504/api/v1/check')
-        .then(response => response.json())
-        .then(data => {
-          if (data.logged_in) {
-            this.getUserProfile()
-          }
-        })
-        .catch(error => {
-          console.log(error)
-        })
-    }
-  },
-  created() {
-    this.check()
-  }
-}
+// export default {
+//   data() {
+//     return {
+//       isLoggedIn: false,
+//       user: null
+//     }
+//   },
+//   methods: {
+//     login() {
+//       window.location.href = 'http://127.0.0.1:2504/api/v1/login'
+//     },
+//     logout() {
+//       fetch('http://127.0.0.1:2504/api/v1/logout')
+//         .then(response => response.json())
+//         .then(data => {
+//           this.isLoggedIn = false
+//           this.user = null
+//         })
+//         .catch(error => {
+//           console.log(error)
+//         })
+//     },
+//     getUserProfile() {
+//       fetch('http://127.0.0.1:2504/api/v1/me')
+//         .then(response => response.json())
+//         .then(data => {
+//           this.isLoggedIn = true
+//           this.user = data
+//         })
+//         .catch(error => {
+//           console.log(error)
+//         })
+//     },
+//     check() {
+//       fetch('http://127.0.0.1:2504/api/v1/check')
+//         .then(response => response.json())
+//         .then(data => {
+//           if (data.logged_in) {
+//             this.getUserProfile()
+//           }
+//         })
+//         .catch(error => {
+//           console.log(error)
+//         })
+//     }
+//   },
+//   created() {
+//     this.check()
+//   }
+// }
 </script>
 
 

@@ -40,7 +40,7 @@ export default {
       itemsToShow: [],
     };
   },
-  created() {
+  beforeMount() {
     this.getTopArtists();
   },
   methods: {

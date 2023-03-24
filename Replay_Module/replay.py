@@ -55,6 +55,45 @@ def get_top_artists():
 
     return jsonify(result['top_artists'])
 
+
+@app.route('/api/v1/reload_top_items')
+def reload_top_items():
+    result = db.top_artists.find_one(
+        {'user': 'digijar@live.com'},
+    )
+
+    if result == None:
+        top_artists_tracks_data()
+    return 
+
+
+def top_artists_tracks_data():
+    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not access_token and 'access_token' in session:
+        access_token = session['access_token']
+
+    if access_token:
+        headers = {
+            'Authorization': f"Bearer {access_token}"
+        }
+        top_artists = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers).json()
+        top_tracks = requests.get('https://api.spotify.com/v1/me/top/tracks', headers=headers).json()
+        user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+        user_email = user_profile["email"]
+
+        # Get a handle to the Top_Artists collection
+        Top_Artists = db.top_artists
+
+        # inserting instance into collection
+        users_top_artist = {'user': user_email, 
+                            'top_artists': top_artists,
+                            'top_tracks': top_tracks}
+        Top_Artists.insert_one(users_top_artist)
+
+        return jsonify({"top_artists": top_artists["items"], "top_tracks": top_tracks["items"]})
+    else:
+        return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
+
 # @app.route('/login')
 # def login():
 #     params = {
@@ -84,9 +123,9 @@ def get_top_artists():
 #             tokens = response.json()
 #             session['access_token'] = tokens['access_token']
 #             session['refresh_token'] = tokens['refresh_token']  # Store the refresh token
-#             return redirect('/top_artists_tracks')
-#         else:
-#             return jsonify({"code": response.status_code, "message": "An error occurred while exchanging the authorization code for an access token."}), response.status_code
+#             return True
+#         return False
+
 
 # @app.route('/top_artists_tracks')
 # def top_artists_tracks():

@@ -27,6 +27,7 @@
 import TopTracksCard from './TopTracksCard.vue';
 import TopArtistsCard from './TopArtistsCard.vue'
 import { setTransitionHooks } from 'vue';
+import axios from 'axios';
 
 export default {
   components: {
@@ -51,6 +52,23 @@ export default {
     }
   },
   methods: {
+
+    // call Replay microservice to reload database information
+    replay() {
+      axios.get('http://127.0.0.1:5001/api/v1/reload_top_items', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      }) 
+        .then((response) => {
+          this.result = response.data;
+          console.log(response.data)
+          this.showMore();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
 
     // visual shit
     typeText() {
