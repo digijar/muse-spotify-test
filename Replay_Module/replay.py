@@ -45,6 +45,16 @@ def get_top_tracks():
 
     return jsonify(result['top_tracks'])
 
+@app.route('/api/v1/get_top_artists')
+def get_top_artists():
+
+    result = db.top_artists.find_one(
+        {'user': 'digijar@live.com'},
+        {'top_artists': 1, '_id': 0}
+    )
+
+    return jsonify(result['top_artists'])
+
 # @app.route('/login')
 # def login():
 #     params = {

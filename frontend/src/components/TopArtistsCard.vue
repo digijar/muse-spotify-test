@@ -32,29 +32,63 @@
 <script>
 import axios from 'axios'
 
+
 export default {
   data() {
     return {
       result: {},
-      itemsToShow: []
-    }
+      itemsToShow: [],
+    };
   },
-  mounted() {
-    this.showMore()
-    this.mongoTopArtists()
+  created() {
+    this.getTopArtists();
   },
   methods: {
-
-    mongoTopArtists() {
-      
+    getTopArtists() {
+      axios.get('http://127.0.0.1:5001/api/v1/get_top_artists')
+        .then((response) => {
+          this.result = response.data;
+          console.log(response.data)
+          this.showMore();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-
-
     showMore() {
-      const startIndex = this.itemsToShow.length
-      const endIndex = Math.min(startIndex + 5, this.result.items.length)
-      this.itemsToShow.push(...this.result.items.slice(startIndex, endIndex))
+      if (this.result && this.result.items) {
+        const startIndex = this.itemsToShow.length
+        const endIndex = Math.min(startIndex + 5, this.result.items.length)
+        this.itemsToShow.push(...this.result.items.slice(startIndex, endIndex))
+      }
     }
-  }
-}
+  },
+};
+
+
+// export default {
+//   data() {
+//     return {
+//       result: {},
+//       itemsToShow: []
+//     }
+//   },
+//   mounted() {
+//     this.showMore()
+//     this.mongoTopArtists()
+//   },
+//   methods: {
+
+//     mongoTopArtists() {
+      
+//     },
+
+
+//     showMore() {
+//       const startIndex = this.itemsToShow.length
+//       const endIndex = Math.min(startIndex + 5, this.result.items.length)
+//       this.itemsToShow.push(...this.result.items.slice(startIndex, endIndex))
+//     }
+//   }
+// }
 </script>

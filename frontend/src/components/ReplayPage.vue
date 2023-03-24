@@ -26,7 +26,6 @@
 <script>
 import TopTracksCard from './TopTracksCard.vue';
 import TopArtistsCard from '../components/TopArtistsCard.vue';
-import axios from 'axios';
 import { setTransitionHooks } from 'vue';
 
 export default {
@@ -39,7 +38,7 @@ export default {
       typingSubtitle: '',
       typingComplete: false,
       showCardsAfterDelay: false,
-      refreshIntervalId: null
+      refreshIntervalId: null,
     }
   },
   mounted() {
@@ -53,15 +52,6 @@ export default {
     }
   },
   methods: {
-
-    // actual important stuff
-    replay() {
-
-    },
-
-    pullUsersTop() {
-
-    },
 
     // visual shit
     typeText() {
