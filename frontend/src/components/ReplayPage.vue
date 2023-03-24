@@ -16,12 +16,18 @@
     <TopArtistsCard v-if="showCards"></TopArtistsCard>
   </div>
 
+  <div class="pt-2">
+    <button @click="replay">Reload top artists and songs!</button>
+  </div>
+
   <br><br><br>
 </template>
 
 <script>
 import TopTracksCard from './TopTracksCard.vue';
 import TopArtistsCard from '../components/TopArtistsCard.vue';
+import axios from 'axios';
+import { setTransitionHooks } from 'vue';
 
 export default {
   components: {
@@ -39,6 +45,7 @@ export default {
   mounted() {
     this.startRefresh()
     this.typeText()
+    this.pullUsersTop()
   },
   computed: {
     showCards() {
@@ -46,6 +53,17 @@ export default {
     }
   },
   methods: {
+
+    // actual important stuff
+    replay() {
+
+    },
+
+    pullUsersTop() {
+
+    },
+
+    // visual shit
     typeText() {
       const text = 'Explore your listening'
       let index = 0

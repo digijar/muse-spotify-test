@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Top Artists and Tracks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        button {
+            background-color: #1DB954;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Top 5 Artists</h1>
+    <ol id="artists"></ol>
+
+    <h1>Your Top 5 Tracks</h1>
+    <ol id="tracks"></ol>
+
+    <ol>
+        <button id="recommendation-btn">Go to Recommendations Page</button>
+    </ol>
+
+    <script>
+
+        async function fetchTopArtistsTracks() {
+            const response = await fetch('/top_artists_tracks_data', {
+                headers: {
+                    'Authorization': `Bearer {{ access_token }}`
+                }
+            });
+            const data = await response.json();
+
+            const artistsList = document.getElementById('artists');
+            const tracksList = document.getElementById('tracks');
+
+            data.top_artists.slice(0, 5).forEach(artist => {
+                const listItem = document.createElement('li');
+                listItem.textContent = artist.name;
+                artistsList.appendChild(listItem);
+            });
+
+            data.top_tracks.slice(0, 5).forEach(track => {
+                const listItem = document.createElement('li');
+                listItem.textContent = track.name + ' - ' + track.artists[0].name;
+                tracksList.appendChild(listItem);
+            });
+        }
+
+        fetchTopArtistsTracks();
+
+        document.getElementById('recommendation-btn').addEventListener('click', () => {
+            window.location.href = 'http://127.0.0.1:5001/recommendations';
+        });
+
+    </script>
+</body>
+</html>

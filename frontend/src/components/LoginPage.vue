@@ -68,10 +68,10 @@ export default {
   },
   methods: {
     login() {
-      window.location.href = 'http://127.0.0.1:2504/api/login'
+      window.location.href = 'http://127.0.0.1:2504/api/v1/login'
     },
     logout() {
-      fetch('http://127.0.0.1:2504/api/logout')
+      fetch('http://127.0.0.1:2504/api/v1/logout')
         .then(response => response.json())
         .then(data => {
           this.isLoggedIn = false
@@ -82,7 +82,7 @@ export default {
         })
     },
     getUserProfile() {
-      fetch('http://127.0.0.1:2504/api/me')
+      fetch('http://127.0.0.1:2504/api/v1/me')
         .then(response => response.json())
         .then(data => {
           this.isLoggedIn = true
@@ -93,7 +93,7 @@ export default {
         })
     },
     check() {
-      fetch('http://127.0.0.1:2504/api/check')
+      fetch('http://127.0.0.1:2504/api/v1/check')
         .then(response => response.json())
         .then(data => {
           if (data.logged_in) {
