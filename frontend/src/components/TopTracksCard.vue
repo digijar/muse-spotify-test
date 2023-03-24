@@ -16,14 +16,14 @@
             <h5 class="sub-title mt-2">{{ track.artists[0].name }}</h5>
           </div>
         </div>
-        <div class="col d-flex align-items-center" v-if="itemsToShow.length < result.items.length">
+        <!-- <div class="col d-flex align-items-center" v-if="itemsToShow.length < result.items.length"> -->
           <div class="card-block text-center justify-content-center">
             <button class="btn btn-outline-secondary" @click="showMore"
               style="font-size: 1.2em; padding: 10px 20px; font-weight: 800; display: flex; justify-content: center; align-items: center;">
               View More
             </button>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </div>

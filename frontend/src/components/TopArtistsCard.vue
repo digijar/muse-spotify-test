@@ -16,14 +16,14 @@
             <h4 class="title mt-3">{{ artist.name.length > 16 ? artist.name.substr(0, 16) + '...' : artist.name }}</h4>
           </div>
         </div>
-        <div class="col d-flex align-items-center" v-if="itemsToShow.length < result.items.length">
+        <!-- <div class="col d-flex align-items-center" v-if="itemsToShow.length < result.items.length"> -->
           <div class="card-block text-center justify-content-center">
             <button class="btn btn-outline-secondary" @click="showMore"
               style="font-size: 1.2em; padding: 10px 20px; font-weight: 800; display: flex; justify-content: center; align-items: center;">
               View More
             </button>
           </div>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </div>

@@ -25,7 +25,7 @@
 
 <script>
 import TopTracksCard from './TopTracksCard.vue';
-import TopArtistsCard from '../components/TopArtistsCard.vue';
+import TopArtistsCard from './TopArtistsCard.vue'
 import { setTransitionHooks } from 'vue';
 
 export default {
@@ -44,7 +44,6 @@ export default {
   mounted() {
     this.startRefresh()
     this.typeText()
-    this.pullUsersTop()
   },
   computed: {
     showCards() {
