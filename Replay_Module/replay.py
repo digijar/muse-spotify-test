@@ -37,9 +37,9 @@ app.secret_key = os.urandom(24)
 
 @app.route('/api/v1/get_top_tracks')
 def get_top_tracks():
-
+    email = request.headers.get('Email', '')
     result = db.top_artists.find_one(
-        {'user': 'digijar@live.com'},
+        {'user': email},
         {'top_tracks': 1, '_id': 0}
     )
 
@@ -47,9 +47,9 @@ def get_top_tracks():
 
 @app.route('/api/v1/get_top_artists')
 def get_top_artists():
-
+    email = request.headers.get('Email', '')
     result = db.top_artists.find_one(
-        {'user': 'digijar@live.com'},
+        {'user': email},
         {'top_artists': 1, '_id': 0}
     )
 
@@ -58,17 +58,46 @@ def get_top_artists():
 
 @app.route('/api/v1/reload_top_items')
 def reload_top_items():
+    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    email = request.headers.get('Email', '')
+
     result = db.top_artists.find_one(
-        {'user': 'digijar@live.com'},
+        {'user': email},
     )
 
     if result == None:
-        top_artists_tracks_data()
-    return 
+        return insert_top_artists_tracks_data(access_token)
+    
+    return update_top_artists_tracks_data(access_token)
 
+def update_top_artists_tracks_data(access_token):
+    if not access_token and 'access_token' in session:
+        access_token = session['access_token']
 
-def top_artists_tracks_data():
-    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    if access_token:
+        headers = {
+            'Authorization': f"Bearer {access_token}"
+        }
+        top_artists = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers).json()
+        top_tracks = requests.get('https://api.spotify.com/v1/me/top/tracks', headers=headers).json()
+        user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+        user_email = user_profile["email"]
+
+        # Get a handle to the Top_Artists collection
+        Top_Artists = db.top_artists
+
+        # updating instance in collection
+        result = Top_Artists.update_one(
+            {'user': user_email},
+            {"$set": {"top_artists": top_artists, "top_tracks": top_tracks}, "$currentDate": {"lastModified": True}},
+        )
+
+        if result.modified_count == 1:
+            return jsonify({"code": 200, "message": "User's Top artists and tracks updated successfully."}), 200
+    else:
+        return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
+
+def insert_top_artists_tracks_data(access_token):
     if not access_token and 'access_token' in session:
         access_token = session['access_token']
 

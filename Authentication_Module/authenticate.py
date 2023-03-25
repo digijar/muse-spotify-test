@@ -98,6 +98,30 @@ def refresh():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
+@app.route('/api/v1/email')
+def email():
+    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    if not access_token and 'access_token' in session:
+        access_token = session['access_token']
+
+    if access_token:
+        headers = {
+            'Authorization': f"Bearer {access_token}"
+        }
+        user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+        user_email = user_profile["email"]
+
+        response_data = {
+            'email': user_email
+        }
+
+        response = jsonify(response_data)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    
+    else:
+        return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
+
 
 ### setting flask host and port
 if __name__ == '__main__':

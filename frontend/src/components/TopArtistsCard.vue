@@ -31,7 +31,7 @@
 
 <script>
 import axios from 'axios'
-
+const email = localStorage.getItem('email')
 
 export default {
   data() {
@@ -45,7 +45,11 @@ export default {
   },
   methods: {
     getTopArtists() {
-      axios.get('http://127.0.0.1:5001/api/v1/get_top_artists')
+      axios.get('http://127.0.0.1:5001/api/v1/get_top_artists', {
+        headers: {
+          'Email': `${email}`
+        }
+      })
         .then((response) => {
           this.result = response.data;
           console.log(response.data)

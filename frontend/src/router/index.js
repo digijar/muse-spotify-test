@@ -81,9 +81,26 @@ router.beforeEach((to, from, next) => {
       setTimeout(refreshAuthTokenWithPython, time_until_expiry)
     }
   }
-
+  getUserEmail(auth_token)
   next()
 })
+
+function getUserEmail(auth_token) {
+  axios.get('http://127.0.0.1:5002/api/v1/email', {
+    headers: {
+      'Authorization': `Bearer ${auth_token}`
+    }
+  }) 
+  .then((response) => {
+    const email = response.data.email
+
+    // Store email in localStorage
+    localStorage.setItem('email', email)
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
 function redirectToSpotifyAuth() {
   const redirect_uri = window.location.href
