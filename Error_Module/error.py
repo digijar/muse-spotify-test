@@ -222,5 +222,5 @@ def insert_top_artists_tracks_data(access_token):
 
 ### setting flask host and port
 if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage Spotify Authorization Code Flow ...")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    print("This is flask for " + os.path.basename(__file__) + ": muse's errors ...")
+    app.run(host='0.0.0.0', port=4997, debug=True)
