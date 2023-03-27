@@ -21,12 +21,18 @@ const router = createRouter({
     {
       path: '/replay',
       name: 'replay',
-      component: ReplayView
+      component: ReplayView,
+      meta: {
+        needsAuth: true
+      }
     },
     {
       path: '/blend',
       name: 'blend',
-      component: BlendView
+      component: BlendView,
+      meta: {
+        needsAuth: true
+      }
     },
     {
       path: '/loginauth',
@@ -41,7 +47,10 @@ const router = createRouter({
     {
       path: '/groupblend',
       name: "groupblend",
-      component: GroupBlend
+      component: GroupBlend,
+      meta: {
+        needsAuth: true
+      }
     },
 
     {
@@ -54,6 +63,14 @@ const router = createRouter({
 
 const SPOTIFY_AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize'
 const REFRESH_TIME_LIMIT = 3599 // 1 hour in seconds
+
+router.beforeEach((to, from, next) => { // this is to check if user logged in
+  if (to.meta.needsAuth && sessionStorage.getItem("access_token") == null) {
+    next("/loginauth");
+  } else {
+    next();
+  }
+})
 
 router.beforeEach((to, from, next) => {
   const auth_token = localStorage.getItem('spotifyAuthToken')
@@ -90,16 +107,16 @@ function getUserEmail(auth_token) {
     headers: {
       'Authorization': `Bearer ${auth_token}`
     }
-  }) 
-  .then((response) => {
-    const email = response.data.email
-
-    // Store email in localStorage
-    localStorage.setItem('email', email)
   })
-  .catch((error) => {
-    console.log(error);
-  });
+    .then((response) => {
+      const email = response.data.email
+
+      // Store email in localStorage
+      localStorage.setItem('email', email)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 function redirectToSpotifyAuth() {
