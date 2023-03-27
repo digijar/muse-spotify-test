@@ -20,17 +20,27 @@ const router = createRouter({
     {
       path: '/replay',
       name: 'replay',
-      component: ReplayView
+      component: ReplayView,
+      meta: {
+        needsAuth: true
+      }
+      
     },
     {
       path: '/blend',
       name: 'blend',
-      component: BlendView
+      component: BlendView,
+      meta: {
+        needsAuth: true
+      }
     },
     {
       path: '/account',
       name: 'account',
-      component: AccountView
+      component: AccountView,
+      meta: {
+        needsAuth: true
+      }
     },
     {
       path: '/loginauth',
@@ -45,7 +55,10 @@ const router = createRouter({
     {
       path: '/groupblend',
       name: "groupblend",
-      component: GroupBlend
+      component: GroupBlend,
+      meta: {
+        needsAuth: true
+      }
     },
 
     {
@@ -54,6 +67,14 @@ const router = createRouter({
       component: Test
     }
   ]
+})
+
+router.beforeEach((to,from,next)=>{
+  if(to.meta.needsAuth && sessionStorage.getItem("access_token")==null){
+    next("/loginauth");
+  } else {
+    next();
+  }
 })
 
 export default router

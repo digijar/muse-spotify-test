@@ -10,17 +10,17 @@
                                 <p class=" mb-5">Please enter your login and password</p>
                                 <div class="mb-3">
                                     <label for="email" class="form-label ">Email address</label>
-                                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" v-model="email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label ">Password</label>
-                                    <input type="password" class="form-control" id="password" placeholder="*******">
+                                    <input type="password" class="form-control" id="password" placeholder="*******" v-model="password">
                                 </div>
                                 <p class="small"><a class="text-primary" href="forget-password.html">Forgot password?</a>
                                 </p>
                                 <div class="d-grid">
                                     <RouterLink to="/groupblend">
-                                        <button class="btn btn-outline-dark" type="submit">Login</button>
+                                        <button class="btn btn-outline-dark" type="submit" @click.prevent="validateUserCredentials">Login</button>
                                     </RouterLink>
                                 </div>
                             </form>
@@ -30,6 +30,7 @@
                                     </RouterLink>
                                 </p>
                             </div>
+                           
 
                         </div>
                     </div>
@@ -38,3 +39,44 @@
         </div>
     </div>
 </template>
+
+
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'LoginAuthPage',
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async validateUserCredentials() {
+      try {
+        console.log(this.email, this.password);
+
+        // Send request to Flask API to authenticate user and retrieve JWT
+        const response = await axios.post('http://localhost:5000/api/authenticate', {
+          email: this.email,
+          password: this.password,
+        });
+
+        const { access_token } = response.data;
+        console.log('JWT received:', access_token);
+
+        // Set JWT in local storage
+        sessionStorage.setItem('access_token', access_token);
+
+        // Redirect to groupblend page
+        this.$router.push('/groupblend');
+      } catch (error) {
+        console.error(error);
+        console.log('User not found');
+      }
+    },
+  },
+};
+</script>

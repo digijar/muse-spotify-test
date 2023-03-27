@@ -1,6 +1,6 @@
 import pymongo
 from pymongo import MongoClient
-
+# pip3 install pymongo
 # Replace the placeholder string with your MongoDB connection string
 mongo_uri = "mongodb+srv://<username>:<password>@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority"
 
@@ -32,6 +32,12 @@ error_log_collection = db.error_log
 error_log = {'error_code':200,'error_msg':'bad connection','datetime':'2023-03-20 14:15:02.886664'}
 result = error_log_collection.insert_one(error_log)
 
-
 # Print the inserted_id
 # print(result.inserted_id)
+
+
+#CREATING ACCOUNTS
+emails=['mdnguyen.2021@scis.smu.edu.sg','jfiore.2021@scis.smu.edu.sg','zllow.2021@scis.smu.edu.sg','jasperchong.2021@scis.smu.edu.sg','jaron.chan.2021@business.smu.edu.sg',]
+for email in emails:
+    pw=email.split('@')
+    
