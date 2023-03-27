@@ -55,6 +55,7 @@ export default {
       <h3>Welcome, {{ user.display_name }}!</h3>
       <button @click="logout">Log out</button>
     </div>
+    <button  @click="this.$router.push('/loginauth')">Log in to Muse Account</button>
   </div>
 </template>
 
