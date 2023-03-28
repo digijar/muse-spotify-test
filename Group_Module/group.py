@@ -10,6 +10,7 @@ import pika
 import json
 import pymongo
 from pymongo import MongoClient
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -65,6 +66,8 @@ def get_friends():
 
     return jsonify(friend_names)
 
+
+################ for notification and error microservice ###################
 # send friend email notification + add friend into group
 @app.route("/api/v1/add_friend", methods=['POST'])
 def add_friend():
@@ -142,6 +145,98 @@ def processEmail(friend_json):
         }
     }
 
+
+
+
+############ for recommendations microservice ##############
+@app.route("/api/v1/check_personalUpload")
+def check_personalUpload():
+    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    email = request.headers.get('Email', '')
+    group_name = request.headers.get('group_name', '')
+
+    personalUpload = False
+    playlistID = ""
+    for result in db.group.find({"group_name": group_name, "user_and_playlist": { "$exists": True }}):
+        if len(result["user_and_playlist"]) > 1:
+            for emails in result["user_and_playlist"]:
+                if email == emails["email"]:
+                    personalUpload = True
+                    playlistID = emails["playlistID"]
+
+    ## get uploaded playlist details
+    if personalUpload == True and playlistID != "":
+        headers = {
+            'Authorization': f"Bearer {access_token}"
+        }
+
+        playlist_response = requests.get(f'https://api.spotify.com/v1/playlists/{playlistID}', headers=headers)
+
+        if playlist_response.status_code != 200:
+            print("Error getting playlist:", playlist_response.status_code, playlist_response.text)
+            return jsonify({"code": 500, "bool": False, "message": "An error occurred while getting playlist."})
+        else:
+            playlist_data = playlist_response.json()
+            return jsonify({"code": 200, "bool": personalUpload, "name": playlist_data["name"], "link": playlist_data["external_urls"]["spotify"], "cover": playlist_data["images"][0]["url"]})
+    else:
+        return jsonify({"bool": personalUpload})
+
+@app.route("/api/v1/check_groupStatus")
+def check_groupStatus():
+    email = request.headers.get('Email', '')
+    group_name = request.headers.get('group_name', '')
+
+    groupStatus = False
+    for result in db.group.find({"group_name": group_name, "user_and_playlist": { "$exists": True }}):
+        if len(result["user_and_playlist"]) == len(result["friends"]):
+            groupStatus = True
+
+    return jsonify(groupStatus)
+
+@app.route("/api/v1/check_recommendedStatus")
+def check_recommendedStatus():
+    email = request.headers.get('Email', '')
+    group_name = request.headers.get('group_name', '')
+
+    recommendedStatus = False
+    for result in db.group.find({"group_name": group_name, "recommended_playlist": { "$exists": True }}):
+        if len(result["user_and_playlist"]) == len(result["friends"]):
+            recommendedStatus = True
+
+    return jsonify(recommendedStatus)
+
+
+@app.route("/api/v1/save_playlist", methods=['POST'])
+def save_playlist():
+    data = request.get_json()
+    playlist_link = data.get('playlist_link')
+    email = data.get('email')
+    group_name = request.headers.get('group_name', '')
+    playlist_id = re.search(r'playlist\/(\w+)', playlist_link).group(1)
+    savedStatus = False
+
+    # query for documents with a specific group name and user_and_playlist field not exists
+    query = {"group_name": group_name, "user_and_playlist": {"$exists": False}}
+    # add user_and_playlist field to the matched documents with an empty object as the value
+    update = {"$set": {"user_and_playlist": []}}
+    # update the documents matching the query
+    result1 = db.group.update_one(query, update)
+
+    # query for documents with a specific group name and user_and_playlist field containing the email key
+    query = {"group_name": group_name, "user_and_playlist.email": email}
+    # if a document is found, update the playlist_id value for the email key
+    update_existing = {"$set": {"user_and_playlist.$.playlistID": playlist_id}}
+    # update the documents matching the query
+    result = db.group.update_one(query, update_existing)
+
+    # if no documents are updated, add a new subdocument with the email and playlist_id
+    if result.modified_count == 0:
+        update_new = {"$push": {"user_and_playlist": {"email": email, "playlistID": playlist_id}}}
+        result = db.group.update_one({"groupName": "your_group_name"}, update_new)
+
+    savedStatus = True
+
+    return jsonify(savedStatus)
 
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for the group complex microservice...")
