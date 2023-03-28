@@ -50,11 +50,11 @@ export default {
   </div>
 
   <div>
-    <button v-if="!isLoggedIn" @click="login">Log in to Spotify</button>
+    <!-- <button v-if="!isLoggedIn" @click="login">Log in to Spotify</button>
     <div v-else>
       <h3>Welcome, {{ user.display_name }}!</h3>
       <button @click="logout">Log out</button>
-    </div>
+    </div> -->
     <button  @click="this.$router.push('/loginauth')">Log in to Muse Account</button>
   </div>
 </template>

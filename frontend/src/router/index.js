@@ -27,7 +27,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/blend',
+      path: '/blend/:group_name',
       name: 'blend',
       component: BlendView,
       meta: {

@@ -5,7 +5,7 @@ import os, sys
 from os import environ
 import requests
 from invokes import invoke_http
-import amqp_setup
+# import amqp_setup
 import pika
 import json
 import pymongo
@@ -14,12 +14,6 @@ from pymongo import MongoClient
 app = Flask(__name__)
 CORS(app)
 app.secret_key = os.urandom(24)
-
-#book_URL = "http://localhost:5000/book"
-order_URL = environ.get('order_URL') or "http://localhost:5001/order" 
-shipping_record_URL = environ.get('shipping_record_URL') or "http://localhost:5002/shipping_record" 
-#activity_log_URL = "http://localhost:5003/activity_log"
-#error_URL = "http://localhost:5004/error"
 
 authentication_URL = "http://127.0.0.1:5002"
 replay_URL = "http://127.0.0.1:5001"
@@ -46,6 +40,21 @@ mongo_uri = f"mongodb+srv://{username}:{password}@musecluster.egcmgf4.mongodb.ne
 client = MongoClient(mongo_uri, ssl=True, tlsAllowInvalidCertificates=True)
 db = client.ESD_Muse
 
+
+@app.route("/api/v1/get_groups")
+def get_groups():
+    email = request.headers.get('Email', '')
+    group_names = []
+    for result in db.group.find({}):
+        if email in result["friends"]:
+            group_names.append(result["group_name"])
+
+    return jsonify(group_names)
+
+
+
+
+###### Lab functions #######
 @app.route("/place_order", methods=['POST'])
 def place_order():
     # Simple check of input format and data of the request are JSON
@@ -86,7 +95,7 @@ def processPlaceOrder(order):
     print('\n-----Invoking order microservice-----')
     order_result = invoke_http(order_URL, method='POST', json=order)
     print('order_result:', order_result)
-  
+
     # Check the order result; if a failure, send it to the error microservice.
     code = order_result["code"]
     message = json.dumps(order_result)
@@ -179,14 +188,9 @@ def processPlaceOrder(order):
     }
 
 
-# Execute this program if it is run as a main script (not by 'import')
+
+
+
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for the group complex microservice...")
     app.run(host="0.0.0.0", port=4998, debug=True)
-    # Notes for the parameters: 
-    # - debug=True will reload the program automatically if a change is detected;
-    #   -- it in fact starts two instances of the same flask program, and uses one of the instances to monitor the program changes;
-    # - host="0.0.0.0" allows the flask program to accept requests sent from any IP/host (in addition to localhost),
-    #   -- i.e., it gives permissions to hosts with any IP to access the flask program,
-    #   -- as long as the hosts can already reach the machine running the flask program along the network;
-    #   -- it doesn't mean to use http://0.0.0.0 to access the flask program.

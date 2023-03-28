@@ -268,4 +268,4 @@ def refresh_access_token(refresh_token):
 
 if __name__ == '__main__':
     print("This is flask for " + os.path.basename(__file__) + ": manage Spotify Authorization Code Flow ...")
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5004, debug=True)
