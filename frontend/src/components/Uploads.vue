@@ -143,9 +143,11 @@
 
 <script>
 export default {
+  props: ["group_name"],
+
   data() {
     return {
-      personalUpload: true,
+      personalUpload: false,
       groupStatus: "waiting",
       // waiting, successful
     }

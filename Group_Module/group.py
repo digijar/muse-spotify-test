@@ -5,7 +5,7 @@ import os, sys
 from os import environ
 import requests
 from invokes import invoke_http
-# import amqp_setup
+import amqp_setup
 import pika
 import json
 import pymongo
@@ -15,11 +15,11 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = os.urandom(24)
 
-authentication_URL = "http://127.0.0.1:5002"
-replay_URL = "http://127.0.0.1:5001"
+# authentication_URL = "http://127.0.0.1:5002"
+# replay_URL = "http://127.0.0.1:5001"
 recommendations_URL = "http://127.0.0.1:5000"
-notifications_URL = "http://127.0.0.1:4999"
-error_URL = "http://127.0.0.1:4997"
+notifications_URL = "http://127.0.0.1:4999/api/v1/email"
+error_URL = "http://127.0.0.1:4997/api/v1/error"
 
 # for API Keys
 from dotenv import load_dotenv
@@ -40,7 +40,7 @@ mongo_uri = f"mongodb+srv://{username}:{password}@musecluster.egcmgf4.mongodb.ne
 client = MongoClient(mongo_uri, ssl=True, tlsAllowInvalidCertificates=True)
 db = client.ESD_Muse
 
-
+# for PlaylistCard component on BlendPage component which is on GroupBlendView
 @app.route("/api/v1/get_groups")
 def get_groups():
     email = request.headers.get('Email', '')
@@ -51,144 +51,96 @@ def get_groups():
 
     return jsonify(group_names)
 
+# for InviteFriend component on BlendView
+@app.route("/api/v1/get_friends")
+def get_friends():
+    email = request.headers.get('Email', '')
+    group_name = request.headers.get('group_name', '')
+
+    friend_names = []
+    for result in db.group.find({"group_name": group_name}):
+        for name in result["friends"]:
+            if name != email:
+                friend_names.append(name)
+
+    return jsonify(friend_names)
+
+# send friend email notification + add friend into group
+@app.route("/api/v1/add_friend", methods=['POST'])
+def add_friend():
+    data = request.json
+    friend_email = data.get('friend_email')
+    group_name = data.get('group_name')
+
+    # Check if the group exists in the database
+    group = db.group.find_one({'group_name': group_name})
+    if group is None:
+        return jsonify({'message': 'Group not found'}), 404
+
+    friends = group.get('friends', [])
+
+    # Check if the friend is already in the group
+    if friend_email in friends:
+        return jsonify({'message': 'Friend is already in the group'}), 404
+
+    # If friend not in group,
+    # Add the friend to the group
+    friends.append(friend_email)
+    result = db.group.update_one({'group_name': group_name}, {'$set': {'friends': friends}})
+
+    # convert friend's email to json
+    data = {"friend_email": friend_email}
+    friend_json = json.dumps(data)
+
+    # sending friend's email to notification queue
+    print('\n\n-----Publishing the friends email with routing_key=friend.notification-----')
+
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="friend.notification", 
+        body=friend_json, properties=pika.BasicProperties(delivery_mode = 2)) 
+
+    # send friend_email to notification microservice
+    result = processEmail(friend_json)
+    print('\n------------------------')
+    print('\nresult: ', result)
+
+    return jsonify({'message': 'Friend added successfully'}), 201
 
 
+def processEmail(friend_json):
+    # Invoke the notification microservice
+    print('\n-----Invoking notification microservice-----')
+    notification_result = invoke_http(notifications_URL, method='POST', json=friend_json)
+    print('notification_result:', notification_result)
 
-###### Lab functions #######
-@app.route("/place_order", methods=['POST'])
-def place_order():
-    # Simple check of input format and data of the request are JSON
-    if request.is_json:
-        try:
-            order = request.get_json()
-            print("\nReceived an order in JSON:", order)
-
-            # do the actual work
-            # 1. Send order info {cart items}
-            result = processPlaceOrder(order)
-            print('\n------------------------')
-            print('\nresult: ', result)
-            return jsonify(result), result["code"]
-
-        except Exception as e:
-            # Unexpected error in code
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-            print(ex_str)
-
-            return jsonify({
-                "code": 500,
-                "message": "place_order.py internal error: " + ex_str
-            }), 500
-
-    # if reached here, not a JSON request.
-    return jsonify({
-        "code": 400,
-        "message": "Invalid JSON input: " + str(request.get_data())
-    }), 400
-
-
-def processPlaceOrder(order):
-    # 2. Send the order info {cart items}
-    # Invoke the order microservice
-    print('\n-----Invoking order microservice-----')
-    order_result = invoke_http(order_URL, method='POST', json=order)
-    print('order_result:', order_result)
-
-    # Check the order result; if a failure, send it to the error microservice.
-    code = order_result["code"]
-    message = json.dumps(order_result)
+    code = notification_result["code"]
+    message = json.dumps(notification_result)
 
     amqp_setup.check_setup()
 
     if code not in range(200, 300):
         # Inform the error microservice
-        #print('\n\n-----Invoking error microservice as order fails-----')
-        print('\n\n-----Publishing the (order error) message with routing_key=order.error-----')
+        print('\n\n-----Publishing the (notification error) message with routing_key=notification.error-----')
 
-        # invoke_http(error_URL, method="POST", json=order_result)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notification.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-        # make message persistent within the matching queues until it is received by some receiver 
-        # (the matching queues have to exist and be durable and bound to the exchange)
+        
+        error_result = invoke_http(error_URL, method='POST', json=message)
+        print('error_result:', error_result)
 
-        # - reply from the invocation is not used;
-        # continue even if this invocation fails        
-        print("\nOrder status ({:d}) published to the RabbitMQ Exchange:".format(
-            code), order_result)
-
-        # 7. Return error
         return {
             "code": 500,
-            "data": {"order_result": order_result},
-            "message": "Order creation failure sent for error handling."
+            "data": {"notification_result": notification_result},
+            "message": "Notification failure sent for error handling."
         }
-
-    # Notice that we are publishing to "Activity Log" only when there is no error in order creation.
-    # In http version, we first invoked "Activity Log" and then checked for error.
-    # Since the "Activity Log" binds to the queue using '#' => any routing_key would be matched 
-    # and a message sent to “Error” queue can be received by “Activity Log” too.
-
-    else:
-        # 4. Record new order
-        # record the activity log anyway
-        #print('\n\n-----Invoking activity_log microservice-----')
-        print('\n\n-----Publishing the (order info) message with routing_key=order.info-----')        
-
-        # invoke_http(activity_log_URL, method="POST", json=order_result)            
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
-            body=message)
     
-    print("\nOrder published to RabbitMQ Exchange.\n")
-    # - reply from the invocation is not used;
-    # continue even if this invocation fails
-    
-    # 5. Send new order to shipping
-    # Invoke the shipping record microservice
-    print('\n\n-----Invoking shipping_record microservice-----')    
-    
-    shipping_result = invoke_http(
-        shipping_record_URL, method="POST", json=order_result['data'])
-    print("shipping_result:", shipping_result, '\n')
+    print("\nFriend's Email published to RabbitMQ Exchange.\n")
 
-    # Check the shipping result;
-    # if a failure, send it to the error microservice.
-    code = shipping_result["code"]
-    if code not in range(200, 300):
-        # Inform the error microservice
-        #print('\n\n-----Invoking error microservice as shipping fails-----')
-        print('\n\n-----Publishing the (shipping error) message with routing_key=shipping.error-----')
-
-        # invoke_http(error_URL, method="POST", json=shipping_result)
-        message = json.dumps(shipping_result)
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="shipping.error", 
-            body=message, properties=pika.BasicProperties(delivery_mode = 2))
-
-        print("\nShipping status ({:d}) published to the RabbitMQ Exchange:".format(
-            code), shipping_result)
-
-        # 7. Return error
-        return {
-            "code": 400,
-            "data": {
-                "order_result": order_result,
-                "shipping_result": shipping_result
-            },
-            "message": "Simulated shipping record error sent for error handling."
-        }
-
-    # 7. Return created order, shipping record
     return {
         "code": 201,
         "data": {
-            "order_result": order_result,
-            "shipping_result": shipping_result
+            "notification_result": notification_result,
         }
     }
-
-
-
 
 
 if __name__ == "__main__":
