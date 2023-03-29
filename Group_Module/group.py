@@ -225,12 +225,14 @@ def get_recommendations():
         "playlist_ids": playlist_ids
     }
     headers = {
+        "access_token": access_token,
+        "playlist_ids": playlist_ids,
         'Content-Type': 'application/json',
         'Authorization': f"Bearer {access_token}"
     }
 
     # Make the request to the Recommendations Microservice API endpoint
-    response = requests.post(recommendations_URL, json=params, headers=headers).json()
+    response = requests.post(recommendations_URL, headers=headers).json()
 
     if response["code"] == 201:
         recommended_playlist_id = response["id"]
@@ -238,13 +240,13 @@ def get_recommendations():
         playlist_info = requests.get(f'https://api.spotify.com/v1/playlists/{recommended_playlist_id}', headers=headers).json()
 
         result = db.group.update_one(
-            {'group_name': group_name, "recommend_playlist": { "$exists": True }},
-            {"$set": {"recommend_playlist": playlist_info}},
+            {'group_name': group_name, "recommended_playlist": { "$exists": True }},
+            {"$set": {"recommended_playlist": playlist_info}},
         )
 
         # if no documents are updated, add a new recommend_playlist field
         if result.modified_count == 0:
-            update_new = {"$push": {"recommended_playlist": playlist_info}}
+            update_new = {"$set": {"recommended_playlist": playlist_info}}
             result = db.group.update_one({"group_name": group_name}, update_new)
 
         print("recommended playlist added into mongoDB")

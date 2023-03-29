@@ -251,7 +251,7 @@ export default {
           if (this.recommendedStatus == true) {
             this.recommendedAlbumCover = response.data.cover
             this.recommendedAlbumName = response.data.name
-            this.recommendedAlbumLink = response.data.external_urls.spotify
+            this.recommendedAlbumLink = response.data.link
           }
         })
         .catch((error) => {
@@ -271,6 +271,7 @@ export default {
       })
         .then((response) => {
           console.log(response.data)
+          window.location.reload()
         })
         .catch((error) => {
           console.log(error);

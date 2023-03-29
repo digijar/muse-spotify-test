@@ -94,19 +94,28 @@ def recommendations():
 @app.route('/generate_recommendations', methods=['POST'])
 def generate_recommendations():
     # access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    access_token = request.args.get('access_token')
+    access_token = request.headers.get('access_token')
+    playlist_ids = request.headers.get('playlist_ids')
+    print(access_token)
+    print(playlist_ids)
+    playlist_ids = playlist_ids.split(',')
 
     if access_token:
-        playlist_ids = request.args.get('playlist_ids', '').split(',')
-        headers = request.headers
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": request.headers.get('Authorization')
+        }
 
         print("getting user's data")
+        print()
         user_data = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
         user_id = user_data['id']
 
         # Create a new empty playlist
         playlist_randnum = randint(100,999)
 
+        print("creating new playlist")
+        print()
         new_playlist_response = requests.post(
             f'https://api.spotify.com/v1/users/{user_id}/playlists',
             headers=headers,
@@ -123,6 +132,8 @@ def generate_recommendations():
         # Extract tracks from input playlists
         all_tracks = []
         
+        print("getting tracks from all playlists inputted")
+        print()
         for playlist_id in playlist_ids:
             tracks_response = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}/tracks', headers=headers)
             if tracks_response.status_code != 200:
@@ -159,6 +170,8 @@ def generate_recommendations():
                 seed_genres = list(set(seed_genres))
 
         # Generate recommendations based on input playlist tracks
+        print("getting recommendations")
+        print()
         recommended_tracks = requests.get(
             'https://api.spotify.com/v1/recommendations',
             params={
@@ -176,6 +189,8 @@ def generate_recommendations():
             return jsonify({"code": 500, "message": "An error occurred while fetching recommendations."}), 500
 
         # Add recommended tracks to the new playlist
+        print("adding tracks to created playlist")
+        print()
         track_uris = [track['uri'] for track in recommended_tracks['tracks']]
         requests.post(
             f'https://api.spotify.com/v1/playlists/{new_playlist["id"]}/tracks',
