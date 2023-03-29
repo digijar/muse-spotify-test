@@ -12,6 +12,7 @@
     "flask": "^0.2.10",
     "pika": "^0.0.1-security",
     "re": "^0.1.4",
+    "requests": "^0.3.0",
     "sendgrid": "^5.2.3",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",

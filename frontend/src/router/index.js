@@ -76,14 +76,15 @@ router.beforeEach((to, from, next) => {
   const auth_token = localStorage.getItem('spotifyAuthToken')
   const urlParams = new URLSearchParams(window.location.search)
   const code = urlParams.get('code')
+  const email = localStorage.getItem('email')
 
   if (!auth_token && !code) {
     // Authorization token does not exist, redirect to Spotify auth page
     redirectToSpotifyAuth()
-  } else if (code) {
+  } else if (code && !email) {
     // Code is present, get the auth token from the Python backend
     getAuthTokenFromPython(code)
-    location.reload();
+    location.reload()
   } else {
     // Authorization token exists, check if it needs to be refreshed
     const refresh_token = localStorage.getItem('spotifyRefreshToken')
@@ -122,7 +123,7 @@ function getUserEmail(auth_token) {
 
 function redirectToSpotifyAuth() {
   const redirect_uri = window.location.href
-  window.location = `${SPOTIFY_AUTH_ENDPOINT}?client_id=a3b760e2b44741e1aefab722fe0af956&response_type=code&redirect_uri=http://localhost:5173/`
+  window.location = `${SPOTIFY_AUTH_ENDPOINT}/?client_id=a3b760e2b44741e1aefab722fe0af956&response_type=code&state=fcd5d57d-74fa-4c51-b6e3-3908e15ce6db&scope=user-top-read%20playlist-modify-public%20playlist-modify-private%20user-read-private%20user-read-recently-played&redirect_uri=http://localhost:5173/&show_dialog=true`
 }
 
 function getAuthTokenFromPython(code) {

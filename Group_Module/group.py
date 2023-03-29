@@ -18,7 +18,7 @@ app.secret_key = os.urandom(24)
 
 # authentication_URL = "http://127.0.0.1:5002"
 # replay_URL = "http://127.0.0.1:5001"
-recommendations_URL = "http://127.0.0.1:5000"
+recommendations_URL = "http://127.0.0.1:5000/generate_recommendations"
 notifications_URL = "http://127.0.0.1:4999/api/v1/email"
 error_URL = "http://127.0.0.1:4997/api/v1/error"
 
@@ -202,6 +202,10 @@ def check_recommendedStatus():
     for result in db.group.find({"group_name": group_name, "recommended_playlist": { "$exists": True }}):
         if len(result["user_and_playlist"]) == len(result["friends"]):
             recommendedStatus = True
+
+    print('\n-----Invoking recommendation microservice-----')
+    recommendation_result = invoke_http(recommendations_URL, method='POST', json= "")
+    print('recommendation_result:', recommendation_result)
 
     return jsonify(recommendedStatus)
 

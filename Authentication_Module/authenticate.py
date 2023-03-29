@@ -105,10 +105,13 @@ def email():
         access_token = session['access_token']
 
     if access_token:
+        payload={}
         headers = {
-            'Authorization': f"Bearer {access_token}"
+            'Authorization': f"Bearer {access_token}",
+            'Content-Type': 'application/json'
         }
-        user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+        # user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+        user_profile = requests.request("GET", 'https://api.spotify.com/v1/me', headers=headers, data=payload).json()
         user_email = user_profile["email"]
 
         response_data = {
