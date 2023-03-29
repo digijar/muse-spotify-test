@@ -122,7 +122,7 @@ function getUserEmail(auth_token) {
 
 function redirectToSpotifyAuth() {
   const redirect_uri = window.location.href
-  window.location = `${SPOTIFY_AUTH_ENDPOINT}/?client_id=a3b760e2b44741e1aefab722fe0af956&response_type=code&state=fcd5d57d-74fa-4c51-b6e3-3908e15ce6db&scope=user-read-email%20user-top-read%20playlist-modify-public%20playlist-modify-private%20user-read-private%20user-read-recently-played&redirect_uri=http://localhost:5173/&show_dialog=true`
+  window.location = `${SPOTIFY_AUTH_ENDPOINT}/?client_id=a3b760e2b44741e1aefab722fe0af956&response_type=code&state=fcd5d57d-74fa-4c51-b6e3-3908e15ce6db&scope=playlist-read-private%20playlist-read-collaborative%20playlist-modify-private%20playlist-modify-public%20user-read-email%20user-top-read%20playlist-modify-public%20playlist-modify-private%20user-read-private%20user-read-recently-played&redirect_uri=http://localhost:5173/&show_dialog=true`
 }
 
 function getAuthTokenFromPython(code) {

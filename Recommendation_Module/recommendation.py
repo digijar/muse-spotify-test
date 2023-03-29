@@ -8,6 +8,7 @@ from flask import Flask, request, jsonify, redirect, url_for, session, render_te
 from urllib.parse import urlencode
 import json
 from flask import session
+from flask_cors import CORS
 
 # for API Keys
 from dotenv import load_dotenv
@@ -20,6 +21,7 @@ SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 app = Flask(__name__, template_folder='templates')
+CORS(app)
 app.secret_key = os.urandom(24)
 
 @app.route('/')
@@ -81,19 +83,24 @@ def recommendations():
         else:
             return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
 
+
+
+
+
+
+
+
+################### MAIN FUNCTION ###################
 @app.route('/generate_recommendations', methods=['POST'])
 def generate_recommendations():
-    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    if not access_token and 'access_token' in session:
-        access_token = session['access_token']
+    # access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    access_token = request.args.get('access_token')
 
     if access_token:
-        playlist_ids = request.json.get('playlist_ids', [])
+        playlist_ids = request.args.get('playlist_ids', '').split(',')
+        headers = request.headers
 
-        headers = {
-            'Authorization': f"Bearer {access_token}"
-        }
-
+        print("getting user's data")
         user_data = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
         user_id = user_data['id']
 
@@ -176,9 +183,15 @@ def generate_recommendations():
             json={"uris": track_uris}
         )
 
-        return jsonify({"name": new_playlist["name"], "link": new_playlist["external_urls"]["spotify"]})
+        return jsonify({"code": 201, "name": new_playlist["name"], "link": new_playlist["external_urls"]["spotify"], "id": new_playlist["id"]}), 201
     else:
         return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
+
+
+
+
+
+
 
 ### For Refresh Tokens
 def refresh_access_token(refresh_token):

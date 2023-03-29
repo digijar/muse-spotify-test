@@ -187,11 +187,15 @@ def check_groupStatus():
     group_name = request.headers.get('group_name', '')
 
     groupStatus = False
+    user_and_playlist_arr = []
+
     for result in db.group.find({"group_name": group_name, "user_and_playlist": { "$exists": True }}):
         if len(result["user_and_playlist"]) == len(result["friends"]):
             groupStatus = True
+            for arr in result["user_and_playlist"]:
+                user_and_playlist_arr.append(arr["playlistID"])
 
-    return jsonify(groupStatus)
+    return jsonify({"bool": groupStatus, "playlist_arr": user_and_playlist_arr})
 
 @app.route("/api/v1/check_recommendedStatus")
 def check_recommendedStatus():
@@ -199,15 +203,55 @@ def check_recommendedStatus():
     group_name = request.headers.get('group_name', '')
 
     recommendedStatus = False
+    recommended_playlist = {}
     for result in db.group.find({"group_name": group_name, "recommended_playlist": { "$exists": True }}):
-        if len(result["user_and_playlist"]) == len(result["friends"]):
             recommendedStatus = True
+            recommended_playlist = result["recommended_playlist"]
 
-    print('\n-----Invoking recommendation microservice-----')
-    recommendation_result = invoke_http(recommendations_URL, method='POST', json= "")
-    print('recommendation_result:', recommendation_result)
+    if recommendedStatus == False:
+        return jsonify({"bool": recommendedStatus})
+    
+    return jsonify({"code": 200, "bool": recommendedStatus, "name": recommended_playlist["name"], "link": recommended_playlist["external_urls"]["spotify"], "cover": recommended_playlist["images"][0]["url"]})
 
-    return jsonify(recommendedStatus)
+@app.route("/api/v1/get_recommendations")
+def get_recommendations():
+    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+    email = request.headers.get('Email', '')
+    group_name = request.headers.get('group_name', '')
+    playlist_ids = request.headers.get('playlist_ids')
+    
+    params = {
+        "access_token": access_token,
+        "playlist_ids": playlist_ids
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f"Bearer {access_token}"
+    }
+
+    # Make the request to the Recommendations Microservice API endpoint
+    response = requests.post(recommendations_URL, json=params, headers=headers).json()
+
+    if response["code"] == 201:
+        recommended_playlist_id = response["id"]
+
+        playlist_info = requests.get(f'https://api.spotify.com/v1/playlists/{recommended_playlist_id}', headers=headers).json()
+
+        result = db.group.update_one(
+            {'group_name': group_name, "recommend_playlist": { "$exists": True }},
+            {"$set": {"recommend_playlist": playlist_info}},
+        )
+
+        # if no documents are updated, add a new recommend_playlist field
+        if result.modified_count == 0:
+            update_new = {"$push": {"recommended_playlist": playlist_info}}
+            result = db.group.update_one({"group_name": group_name}, update_new)
+
+        print("recommended playlist added into mongoDB")
+        return jsonify({"code": 201, "message": "recommended playlist successfully created"})
+    
+    print("error creating recommended playlist")
+    return jsonify({"code": 500, "message": "recommended playlist creation not successful"})
 
 
 @app.route("/api/v1/save_playlist", methods=['POST'])
