@@ -117,10 +117,8 @@ def email():
         response_data = {
             'email': user_email
         }
-
-        response = jsonify(response_data)
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        
+        return response_data
     
     else:
         return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
