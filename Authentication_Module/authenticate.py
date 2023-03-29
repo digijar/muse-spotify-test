@@ -37,7 +37,7 @@ def get_auth_token(code):
     }
 
     response = requests.post(SPOTIFY_AUTH_ENDPOINT, headers=headers, data=data)
-    response_data = json.loads(response.text)
+    response_data = response.json()
 
     return response_data['access_token'], response_data['refresh_token'], response_data['expires_in']
 

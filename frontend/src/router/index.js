@@ -84,7 +84,6 @@ router.beforeEach((to, from, next) => {
   } else if (code && !email) {
     // Code is present, get the auth token from the Python backend
     getAuthTokenFromPython(code)
-    location.reload()
   } else {
     // Authorization token exists, check if it needs to be refreshed
     const refresh_token = localStorage.getItem('spotifyRefreshToken')
@@ -94,13 +93,13 @@ router.beforeEach((to, from, next) => {
     if (expiry_time && now > parseInt(expiry_time)) {
       // Authorization token has expired, refresh it with the refresh code
       refreshAuthTokenWithPython()
+      location.reload()
     } else {
       // Authorization token is still valid, set a timer to refresh it when it expires
       const time_until_expiry = parseInt(expiry_time) - now
       setTimeout(refreshAuthTokenWithPython, time_until_expiry)
     }
   }
-  getUserEmail(auth_token)
   next()
 })
 
@@ -136,6 +135,7 @@ function getAuthTokenFromPython(code) {
       // Store the authorization token and refresh code in localStorage
       localStorage.setItem('spotifyAuthToken', auth_token)
       localStorage.setItem('spotifyRefreshToken', refresh_token)
+      getUserEmail(auth_token)
 
       // Set a timer to automatically refresh the authorization token using the refresh code
       setTimeout(refreshAuthTokenWithPython, REFRESH_TIME_LIMIT * 1000)

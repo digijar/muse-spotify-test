@@ -236,7 +236,7 @@ def save_playlist():
     # if no documents are updated, add a new subdocument with the email and playlist_id
     if result.modified_count == 0:
         update_new = {"$push": {"user_and_playlist": {"email": email, "playlistID": playlist_id}}}
-        result = db.group.update_one({"groupName": "your_group_name"}, update_new)
+        result = db.group.update_one({"group_name": group_name}, update_new)
 
     savedStatus = True
 
