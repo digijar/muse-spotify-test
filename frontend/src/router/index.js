@@ -83,6 +83,7 @@ router.beforeEach((to, from, next) => {
   } else if (code) {
     // Code is present, get the auth token from the Python backend
     getAuthTokenFromPython(code)
+    location.reload();
   } else {
     // Authorization token exists, check if it needs to be refreshed
     const refresh_token = localStorage.getItem('spotifyRefreshToken')
