@@ -54,12 +54,13 @@
             <div class="mb-3">
               <label>Group Name</label>
               <input type="text" class="form-control" id="group_name_input" v-model="group_name">
+              {{ group_name }}
             </div>
 
-            <div v-for="i in 5" :key="i" class="mb-3">
+            <!-- <div v-for="i in 5" :key="i" class="mb-3">
               <label>Email input {{ i }}:</label>
               <input type="text" class="form-control" id="email_input" v-model="emails[i - 1]">
-            </div>
+            </div> -->
 
           </form>
         </div>
@@ -117,26 +118,17 @@ export default {
         });
     },
     createGroup() {
+      axios.post('http://127.0.0.1:4998/api/v1/create_group', {
+        "group_name": this.group_name,
+        "email": email
+      })
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
 
-      console.log("ok")
-      axios.post('http://127.0.0.1:4998/api/v1/create_group',
-        {
-          'friends': this.emails
-        },
-        {
-          headers: {
-            'group_name': this.group_name
-          }
-        }
-      )
-        .then((response) => {
-          console.log(response.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        });
-
-      this.friends = []
       this.group_name = ''
       location.reload()
     }

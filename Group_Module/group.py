@@ -288,6 +288,33 @@ def save_playlist():
 
     return jsonify(savedStatus)
 
+
+
+
+####### Creating Group #########
+@app.route("/api/v1/create_group", methods=['POST'])
+def create_group():
+    data = request.json
+    email = data.get('email')
+    group_name = data.get('group_name')
+
+    result = db.group.insert_one(
+        {
+            "friends": [email],
+            "group_name": group_name,
+            "user_and_playlist": [],
+            "playlistIDs": []
+        }
+    )
+
+    if result.inserted_id:
+        print("group successfully created")
+        return jsonify({"code": 201, "message": "group successfully created!"}), 201
+    
+    print("group creation not successful :<")
+    return jsonify({"code": 400, "message": "group creation not successful :<"})
+
+
 if __name__ == "__main__":
     print("This is flask " + os.path.basename(__file__) + " for the group complex microservice...")
     app.run(host="0.0.0.0", port=4998, debug=True)
