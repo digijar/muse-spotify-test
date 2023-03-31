@@ -22,8 +22,8 @@
                     <h6 class="card-subtitle text-muted mb-2"> <a :href="personalAlbumLink" target="_blank">Album Link</a></h6>
                   </div>
 
-                  <div v-if="personalUpload || groupStatus == 'waiting' || recommendedStatus == false">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
+                  <div v-if="personalUpload && recommendedStatus == false">
+                    <button class="text center" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
                       playlist?</button>
                   </div>
                 </div>
@@ -82,7 +82,7 @@
                     <div class="square shadow-4-strong" :style="{ 'background-image': 'url(' + recommendedAlbumCover + ')', 'background-size': 'cover', 'background-position': 'center', 'background-color': 'transparent' }"></div>
                     <h6 class="card-title mb-3">{{recommendedAlbumName}}</h6>
                     <h6 class="card-subtitle text-muted mb-2"> <a :href="recommendedAlbumLink" target="_blank">Recommended Album Link</a></h6>
-                    <button @click="deleteRecommendedPlaylist">Generate Playlist Recommendation?</button>
+                    <button @click="deleteRecommendedPlaylist">Remove Playlist?</button>
                   </div>
                 </div>
               </div>
@@ -202,7 +202,10 @@ export default {
       })
         .then((response) => {
           console.log(response.data)
-          this.groupStatus = response.data;
+          if (response.data.bool == true) {
+            this.groupStatus = "successful"
+          }
+          this.playlist_ids = response.data.playlist_arr
         })
         .catch((error) => {
           console.log(error);
@@ -222,7 +225,7 @@ export default {
           if (this.recommendedStatus == true) {
             this.recommendedAlbumCover = response.data.cover
             this.recommendedAlbumName = response.data.name
-            this.recommendedAlbumLink = response.data.external_urls.spotify
+            this.recommendedAlbumLink = response.data.link
           }
         })
         .catch((error) => {
@@ -234,12 +237,8 @@ export default {
       axios.post('http://127.0.0.1:5004/api/v1/save_playlist', 
       {
         'playlist_link': this.inputPlaylistLink,
-        'email': email
-      },
-      {
-        headers: {
-          "group_name": this.group_name
-        },
+        'email': email,
+        "group_name": this.group_name
       })
         .then((response) => {
           console.log(response.data)
@@ -263,6 +262,9 @@ export default {
       })
         .then((response) => {
           console.log(response.data)
+          setTimeout(function(){
+            window.location.reload();
+          }, 10000);
       })
         .catch((error) => {
           console.log(error);
@@ -270,13 +272,15 @@ export default {
     },
 
     deleteRecommendedPlaylist() {
-      axios.post('http://127.0.0.1:5004/api/v1/remove_playlist', {
-        headers: {
-          "group_name": this.group_name,
-        }
+      axios.post('http://127.0.0.1:5004/api/v1/remove_playlist', 
+      {
+        "group_name": this.group_name
       })
         .then((response) => {
           console.log(response.data)
+          setTimeout(function(){
+            window.location.reload();
+          }, 3000);
       })
         .catch((error) => {
           console.log(error);

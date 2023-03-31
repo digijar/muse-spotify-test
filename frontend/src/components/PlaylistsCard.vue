@@ -130,7 +130,9 @@ export default {
       });
 
       this.group_name = ''
-      location.reload()
+      setTimeout(function(){
+        window.location.reload();
+      }, 2000);
     }
   }
 }

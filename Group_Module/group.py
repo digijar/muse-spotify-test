@@ -33,7 +33,7 @@ db = client.ESD_Muse
 # for PlaylistCard component on BlendPage component which is on GroupBlendView
 @app.route("/group/get_groups")
 def group_get_groups():
-    data = request.form
+    data = request.args
     email = data.get('Email')
     group_names = []
     for result in db.group.find({}):
@@ -45,7 +45,7 @@ def group_get_groups():
 # for InviteFriend component on BlendView
 @app.route("/group/get_friends")
 def group_get_friends():
-    data = request.form
+    data = request.args
     email = data.get('Email')
     group_name = data.get('group_name')
 
@@ -61,7 +61,7 @@ def group_get_friends():
 # checks whether user has uploaded
 @app.route("/group/check_personalUpload")
 def group_check_personalUpload():
-    data = request.form
+    data = request.args
     access_token = data.get('access_token')
     group_name = data.get('group_name')
     email = data.get('email')
@@ -94,7 +94,7 @@ def group_check_personalUpload():
 
 @app.route("/group/check_groupStatus")
 def group_check_groupStatus():
-    data = request.form
+    data = request.args
     group_name = data.get('group_name')
 
     groupStatus = False
@@ -110,12 +110,13 @@ def group_check_groupStatus():
 
 @app.route("/group/check_recommendedStatus")
 def group_check_recommendedStatus():
-    data = request.form
+    data = request.args
     group_name = data.get('group_name')
 
     recommendedStatus = False
     recommended_playlist = {}
     for result in db.group.find({"group_name": group_name, "recommended_playlist": { "$exists": True }}):
+        if len(result['recommended_playlist']) > 0:
             recommendedStatus = True
             recommended_playlist = result["recommended_playlist"]
 
@@ -192,7 +193,7 @@ def group_remove_playlist():
             {'group_name': group_name, "recommended_playlist": { "$exists": True }},
             {"$set": {"recommended_playlist": {}}},
         )
-    if result.modified_count == 0:
+    if result.modified_count != 0:
         removedStatus = True
     return jsonify(removedStatus)
 
