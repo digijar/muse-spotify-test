@@ -17,11 +17,11 @@ import json
 from dotenv import load_dotenv
 load_dotenv('spotify_api_keys.env')
 
-username = os.getenv('username')
+user = os.getenv('user')
 password = os.getenv('password')
 
 ### Connecting to MongoDB
-mongo_uri = f"mongodb+srv://{username}:{password}@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority"
+mongo_uri = f"mongodb+srv://{user}:{password}@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(mongo_uri, ssl=True, tlsAllowInvalidCertificates=True)
 db = client.ESD_Muse
 

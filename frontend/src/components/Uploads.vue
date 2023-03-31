@@ -19,7 +19,7 @@
                   <div class="card-body text-center">
                     <div class="square shadow-4-strong" :style="{ 'background-image': 'url(' + personalAlbumCover + ')', 'background-size': 'cover', 'background-position': 'center', 'background-color': 'transparent' }"></div>
                     <h6 class="card-title mb-3">{{personalAlbumName}}</h6>
-                    <h6 class="card-subtitle text-muted mb-2"> <a :href="personalAlbumLink">Album Link</a></h6>
+                    <h6 class="card-subtitle text-muted mb-2"> <a :href="personalAlbumLink" target="_blank">Album Link</a></h6>
                   </div>
 
                   <div v-if="personalUpload || groupStatus == 'waiting' || recommendedStatus == false">
@@ -68,25 +68,7 @@
           <div class="text-center">
             <h5>Waiting for groupmates to upload...</h5>
           </div>
-          <div class="container-fluid">
-            <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2 justify-content-center">
-              <div class="col-3 mr-2">
-                <div class="card bg-light mb-3">
-                  <div class="card-body text-center">
-                    <div class="square rounded-circle"></div>
-                    <h6 class="card-title mb-0">album name</h6>
-                    <h6 class="card-subtitle text-muted mb-2">album link</h6>
-                  </div>
-                </div>
-              </div>
-              <!-- add more card elements here as needed -->
-            </div>
-          </div>
-
-
         </div>
-
-
       </div>
 
       <div v-else>
@@ -97,9 +79,10 @@
               <div class="col-3 mr-2">
                 <div class="card bg-light mb-3">
                   <div class="card-body text-center">
-                    <!-- <div class="square rounded-circle"></div> -->
-                    <h6 class="card-title mb-0">album name</h6>
-                    <h6 class="card-subtitle text-muted mb-2">album link</h6>
+                    <div class="square shadow-4-strong" :style="{ 'background-image': 'url(' + recommendedAlbumCover + ')', 'background-size': 'cover', 'background-position': 'center', 'background-color': 'transparent' }"></div>
+                    <h6 class="card-title mb-3">{{recommendedAlbumName}}</h6>
+                    <h6 class="card-subtitle text-muted mb-2"> <a :href="recommendedAlbumLink" target="_blank">Recommended Album Link</a></h6>
+                    <button @click="deleteRecommendedPlaylist">Generate Playlist Recommendation?</button>
                   </div>
                 </div>
               </div>
@@ -112,7 +95,7 @@
           <div class="text-center">
             <h5>All your friends have uploaded their playlists!</h5>
             <h5>But no one has generated a new playlist yet!</h5>
-            <button @click="generateRecommendation">Generate Playlist Recommendation?</button>
+            <button @click="generateRecommendations">Generate Playlist Recommendation?</button>
           </div>
         </div>
       </div>
@@ -170,8 +153,11 @@ export default {
       // waiting, successful
 
       recommendedStatus: false,
+      recommendedAlbumCover: "",
       recommendedAlbumName: "",
       recommendedAlbumLink: "",
+
+    playlist_ids: [],
     }
   },
 
@@ -187,7 +173,7 @@ export default {
 
   methods: {
     checkPersonalUpload() {
-      axios.get('http://127.0.0.1:4998/api/v1/check_personalUpload', {
+      axios.get('http://127.0.0.1:5004/api/v1/check_personalUpload', {
         headers: {
           'Authorization': `Bearer ${auth_token}`,
           'Email': `${email}`,
@@ -209,9 +195,8 @@ export default {
     },
 
     checkGroupStatus() {
-      axios.get('http://127.0.0.1:4998/api/v1/check_groupStatus', {
+      axios.get('http://127.0.0.1:5004/api/v1/check_groupStatus', {
         headers: {
-          'Email': `${email}`,
           "group_name": this.group_name
         }
       })
@@ -224,11 +209,10 @@ export default {
       });
     },
 
+    // for Recommendations
     checkRecommendedStatus() {
-      axios.get('http://127.0.0.1:4998/api/v1/check_recommendedStatus', {
+      axios.get('http://127.0.0.1:5004/api/v1/check_recommendedStatus', {
         headers: {
-          'Authorization': `Bearer ${auth_token}`,
-          'Email': `${email}`,
           "group_name": this.group_name
         }
       })
@@ -236,6 +220,7 @@ export default {
           console.log(response.data.bool)
           this.recommendedStatus = response.data.bool
           if (this.recommendedStatus == true) {
+            this.recommendedAlbumCover = response.data.cover
             this.recommendedAlbumName = response.data.name
             this.recommendedAlbumLink = response.data.external_urls.spotify
           }
@@ -246,7 +231,7 @@ export default {
     },
 
     savePlaylist() {
-      axios.post('http://127.0.0.1:4998/api/v1/save_playlist', 
+      axios.post('http://127.0.0.1:5004/api/v1/save_playlist', 
       {
         'playlist_link': this.inputPlaylistLink,
         'email': email
@@ -267,8 +252,35 @@ export default {
       location.reload()
     },
 
-    generateRecommendation() {
-      return
+    generateRecommendations() {
+      axios.get('http://127.0.0.1:5004/api/v1/get_recommendations', {
+        headers: {
+          'Authorization': `Bearer ${auth_token}`,
+          'Email': `${email}`,
+          "group_name": this.group_name,
+          'playlist_ids': this.playlist_ids.join(',')
+        }
+      })
+        .then((response) => {
+          console.log(response.data)
+      })
+        .catch((error) => {
+          console.log(error);
+      });
+    },
+
+    deleteRecommendedPlaylist() {
+      axios.post('http://127.0.0.1:5004/api/v1/remove_playlist', {
+        headers: {
+          "group_name": this.group_name,
+        }
+      })
+        .then((response) => {
+          console.log(response.data)
+      })
+        .catch((error) => {
+          console.log(error);
+      });
     }
   }
 }

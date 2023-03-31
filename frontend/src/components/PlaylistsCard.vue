@@ -98,7 +98,7 @@ export default {
 
   methods: {
     loadGroups() {
-      axios.get('http://127.0.0.1:4998/api/v1/get_groups', {
+      axios.get('http://127.0.0.1:5004/api/v1/get_groups', {
         headers: {
           'Email': `${email}`
         }
@@ -118,7 +118,7 @@ export default {
         });
     },
     createGroup() {
-      axios.post('http://127.0.0.1:4998/api/v1/create_group', {
+      axios.post('http://127.0.0.1:5004/api/v1/create_group', {
         "group_name": this.group_name,
         "email": email
       })

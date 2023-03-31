@@ -14,7 +14,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv('spotify_api_keys.env')
 
-username = os.getenv('username')
+user = os.getenv('usern')
 password = os.getenv('password')
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
@@ -23,7 +23,7 @@ SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize'
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
 ### Connecting to MongoDB
-mongo_uri = f"mongodb+srv://{username}:{password}@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority"
+mongo_uri = f"mongodb+srv://{user}:{password}@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority"
 
 # Create a MongoDB client and connect to the sample_training database
 client = MongoClient(mongo_uri, ssl=True, tlsAllowInvalidCertificates=True)

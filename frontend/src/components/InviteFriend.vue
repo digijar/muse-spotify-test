@@ -96,7 +96,7 @@ export default {
     }, 
     
     loadFriends() {
-      axios.get('http://127.0.0.1:4998/api/v1/get_friends', {
+      axios.get('http://127.0.0.1:5004/api/v1/get_friends', {
         headers: {
           'Email': `${email}`,
           "group_name": this.group_name
@@ -113,7 +113,7 @@ export default {
     },
 
     addFriend() {
-      axios.post('http://127.0.0.1:4998/api/v1/add_friend', {
+      axios.post('http://127.0.0.1:5004/api/v1/add_friend', {
         friend_email: this.friend_email,
         group_name: this.group_name
       })
