@@ -47,6 +47,7 @@ def group_get_groups():
 def group_get_friends():
     data = request.args
     email = data.get('Email')
+    print(email)
     group_name = data.get('group_name')
 
     friend_names = []
@@ -69,7 +70,8 @@ def group_check_personalUpload():
     personalUpload = False
     playlistID = ""
     for result in db.group.find({"group_name": group_name, "user_and_playlist": { "$exists": True }}):
-        if len(result["user_and_playlist"]) > 1:
+        print("group found!")
+        if len(result["user_and_playlist"]) > 0:
             for emails in result["user_and_playlist"]:
                 if email == emails["email"]:
                     personalUpload = True
@@ -77,7 +79,10 @@ def group_check_personalUpload():
 
     ## get uploaded playlist details
     if personalUpload == True and playlistID != "":
+        print('successfully retrieved user information from Mongo!')
+        print(playlistID)
         headers = {
+            "Content-Type": "application/json",
             'Authorization': f"Bearer {access_token}"
         }
 
@@ -150,10 +155,12 @@ def group_save_playlist():
 
     # if no documents are updated, add a new subdocument with the email and playlist_id
     if result.modified_count == 0:
+        print("pushing new email and playlistID key:value pair into user_and_playlist array!")
         update_new = {"$push": {"user_and_playlist": {"email": email, "playlistID": playlist_id}}}
         result = db.group.update_one({"group_name": group_name}, update_new)
-
-    savedStatus = True
+        savedStatus = True
+    if result.modified_count != 0:
+        savedStatus = True
 
     return jsonify(savedStatus)
 
@@ -170,7 +177,6 @@ def group_create_group():
             "friends": [email],
             "group_name": group_name,
             "user_and_playlist": [],
-            "playlistIDs": []
         }
     )
 

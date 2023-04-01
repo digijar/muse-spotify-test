@@ -181,7 +181,7 @@ export default {
         }
       })
         .then((response) => {
-          console.log(response.data.bool)
+          console.log('personal upload: ' + response.data.bool)
           this.personalUpload = response.data.bool;
           if (this.personalUpload == true) {
             this.personalAlbumName = response.data.name
@@ -220,7 +220,7 @@ export default {
         }
       })
         .then((response) => {
-          console.log(response.data.bool)
+          console.log('recommended status: ' + response.data.bool)
           this.recommendedStatus = response.data.bool
           if (this.recommendedStatus == true) {
             this.recommendedAlbumCover = response.data.cover
@@ -237,18 +237,20 @@ export default {
       axios.post('http://127.0.0.1:5004/api/v1/save_playlist', 
       {
         'playlist_link': this.inputPlaylistLink,
-        'email': email,
+        'email': `${email}`,
         "group_name": this.group_name
       })
         .then((response) => {
-          console.log(response.data)
+          console.log('playlist saved?' + response.data)
         })
         .catch((error) => {
           console.log(error);
       });
 
       this.inputPlaylistLink = ""
-      location.reload()
+      setTimeout(function(){
+        window.location.reload();
+      }, 3000);
     },
 
     generateRecommendations() {
@@ -264,7 +266,7 @@ export default {
           console.log(response.data)
           setTimeout(function(){
             window.location.reload();
-          }, 10000);
+          }, 7000);
       })
         .catch((error) => {
           console.log(error);
@@ -277,7 +279,7 @@ export default {
         "group_name": this.group_name
       })
         .then((response) => {
-          console.log(response.data)
+          console.log('recommended playlist deleted?' + response.data)
           setTimeout(function(){
             window.location.reload();
           }, 3000);

@@ -59,7 +59,7 @@ def processNotification(body):
         {
         "to": [
             {
-            "email": "muse.spotify.automation@gmail.com"
+            "email": friend_email
             }
         ],
         "subject": "Join my müse group now!"
@@ -71,7 +71,7 @@ def processNotification(body):
     "content": [
         {
         "type": "text/html",
-        "value": "Dear " + friend_email + " <br><br> Click <a href='google.com'>here</a> to join my müse group to customise your own <strong>spotify playlists</strong> with your friends! <br><br>Best Regards,<br>müse"
+        "value": "Dear " + friend_email + " <br><br> Click <a href='http://localhost:5173/'>here</a> to join my müse group to customise your own <strong>spotify playlists</strong> with your friends! <br><br>Best Regards,<br>müse"
         }
     ]
     }

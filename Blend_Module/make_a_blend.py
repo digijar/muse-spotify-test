@@ -11,6 +11,7 @@ import json
 import pymongo
 from pymongo import MongoClient
 import re
+import urllib.parse
 
 app = Flask(__name__)
 CORS(app)
@@ -224,8 +225,15 @@ def save_playlist():
     data = request.get_json()
     playlist_link = data.get('playlist_link')
     email = data.get('email')
-    group_name = data.get(group_name)
-    playlist_id = re.search(r'playlist\/(\w+)', playlist_link).group(1)
+    group_name = data.get('group_name')
+
+    def get_spotify_id(spotify_url):
+        parsed_url = urllib.parse.urlparse(spotify_url)
+        spotify_id = parsed_url.path.split('/')[-1]
+        return spotify_id
+    
+    playlist_id = get_spotify_id(playlist_link)
+    print("successfully parsed playlist id " + playlist_id)
     data = {
         'Email': email,
         'group_name': group_name,
