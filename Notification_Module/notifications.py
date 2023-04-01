@@ -4,7 +4,6 @@ import json
 from flask import Flask, request, jsonify
 import sendgrid
 from sendgrid.helpers.mail import *
-import requests
 import twilio
 from twilio.rest import Client
 from flask_cors import CORS

@@ -6,8 +6,8 @@ COPY requirements.txt ./
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-COPY ./amqp_setup.py ./notifications.py ./
+COPY ./ .
 
-EXPOSE 4999
+EXPOSE 5000
 
-CMD [ "python", "notifications.py" ]
+CMD [ "python", "recommendations.py" ]

@@ -18,9 +18,9 @@ CORS(app)
 app.secret_key = os.urandom(24)
 
 ### URLs to call
-recommendations_URL = "http://127.0.0.1:5000/generate_recommendations"
-notifications_URL = "http://127.0.0.1:4999/api/v1/email"
-error_URL = "http://127.0.0.1:4997/api/v1/error"
+recommendations_URL = environ.get('recommendations_URL') or "http://127.0.0.1:5000/generate_recommendations"
+notifications_URL = environ.get('notifications_URL') or "http://127.0.0.1:4999/api/v1/email"
+error_URL = environ.get('error_URL') or "http://127.0.0.1:4997/api/v1/error"
 
 # for API Keys
 from dotenv import load_dotenv
@@ -169,7 +169,7 @@ def get_groups():
     data = {
         'Email': email,
     }
-    group_info = requests.get(f'http://127.0.0.1:4998/group/get_groups', params=data).json()
+    group_info = requests.get('http://group:4998/group/get_groups', params=data).json()
     print(group_info)
     return jsonify(group_info)
 
@@ -182,7 +182,7 @@ def get_friends():
         'Email': email,
         'group_name': group_name
     }
-    friends_info = requests.get(f'http://127.0.0.1:4998/group/get_friends', params=data).json()
+    friends_info = requests.get('http://group:4998/group/get_friends', params=data).json()
     return jsonify(friends_info)
 
 ### requests check_personalUpload ###
@@ -196,7 +196,7 @@ def check_personalUpload():
         'email': email,
         'group_name': group_name
     }
-    personal_upload_info = requests.get(f'http://127.0.0.1:4998/group/check_personalUpload', params=data).json()
+    personal_upload_info = requests.get('http://group:4998/group/check_personalUpload', params=data).json()
     return jsonify(personal_upload_info)
 
 ### requests check_groupStatus ### 
@@ -206,7 +206,7 @@ def check_groupStatus():
     data = {
         'group_name': group_name
     }
-    group_status_info = requests.get(f'http://127.0.0.1:4998/group/check_groupStatus', params=data).json()
+    group_status_info = requests.get('http://group:4998/group/check_groupStatus', params=data).json()
     return jsonify(group_status_info)
 
 ### requests check_recommendedStatus ### 
@@ -216,7 +216,7 @@ def check_recommendedStatus():
     data = {
         'group_name': group_name
     }
-    recommended_status_info = requests.get(f'http://127.0.0.1:4998/group/check_recommendedStatus', params=data).json()
+    recommended_status_info = requests.get('http://group:4998/group/check_recommendedStatus', params=data).json()
     return jsonify(recommended_status_info)
 
 ### requests save_playlist (post) ###
@@ -239,7 +239,7 @@ def save_playlist():
         'group_name': group_name,
         'playlist_id': playlist_id
     }
-    save_playlist_info = requests.post(f'http://127.0.0.1:4998/group/save_playlist', data=data).json()
+    save_playlist_info = requests.post('http://group:4998/group/save_playlist', data=data).json()
     return jsonify(save_playlist_info)
 
 ### requests create_group (post) ###
@@ -252,7 +252,7 @@ def create_group():
         'Email': email,
         'group_name': group_name
     }
-    group_creation_info = requests.post(f'http://127.0.0.1:4998/group/create_group', data=data).json()
+    group_creation_info = requests.post('http://group:4998/group/create_group', data=data).json()
     return jsonify(group_creation_info)
 
 
@@ -265,7 +265,7 @@ def remove_playlist():
         'group_name': group_name
     }
     print(group_name)
-    playlist_deletion_info = requests.post(f'http://127.0.0.1:4998/group/remove_playlist', data=data).json()
+    playlist_deletion_info = requests.post('http://group:4998/group/remove_playlist', data=data).json()
     return jsonify(playlist_deletion_info)
 
 

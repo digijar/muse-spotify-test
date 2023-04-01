@@ -6,8 +6,8 @@ COPY requirements.txt ./
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-COPY ./amqp_setup.py ./notifications.py ./
+COPY ./make_a_blend.py ./invokes.py ./amqp_setup.py ./
 
-EXPOSE 4999
+EXPOSE 5004
 
-CMD [ "python", "notifications.py" ]
+CMD [ "python", "make_a_blend.py" ]

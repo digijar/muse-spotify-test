@@ -266,7 +266,7 @@ export default {
           console.log(response.data)
           setTimeout(function(){
             window.location.reload();
-          }, 7000);
+          }, 5000);
       })
         .catch((error) => {
           console.log(error);

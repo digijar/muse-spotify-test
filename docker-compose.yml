@@ -1,0 +1,250 @@
+version: "3.9"
+
+volumes:
+  pgdata: 
+  kongadata:
+  rabbitmq_data:
+
+networks:
+  kong-net:
+    driver: bridge
+  test-net:
+    driver: bridge
+
+services:
+  ######################################
+  # Email: The Email (AMQP) microservice
+  ######################################
+  email:
+    env_file:
+      - ./Notification_Module/twillo_api_keys.env
+    build:
+      context: ./Notification_Module
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    ports:
+      - "4999:4999"
+    container_name: notification
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ######################################
+  # Error: The Error (AMQP) microservice
+  ######################################
+  error:
+    env_file:
+      - ./Error_Module/spotify_api_keys.env
+    build:
+      context: ./Error_Module
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbitmq
+    restart: on-failure
+    ports:
+      - "4997:4997"
+    container_name: error
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  #############################
+  # auth: The auth microservice
+  #############################
+  auth:
+    env_file:
+      - ./Authentication_Module/spotify_api_keys.env
+    build:
+      context: ./Authentication_Module
+      dockerfile: auth.Dockerfile
+    restart: on-failure
+    ports:
+      - "5003:5003"
+    container_name: auth
+
+  #################################################
+  # Authentication: The Authentication microservice
+  #################################################
+  authentication:
+    env_file:
+      - ./Authentication_Module/spotify_api_keys.env
+    build:
+      context: ./Authentication_Module
+      dockerfile: authentication.Dockerfile
+    restart: on-failure
+    ports:
+      - "5002:5002"
+    container_name: authentication
+
+  ###############################
+  # Group: The Group microservice
+  ###############################
+  group:
+    env_file:
+      - ./Group_Module/spotify_api_keys.env
+    build:
+      context: ./Group_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "4998:4998"
+    container_name: group
+
+  ###################################################
+  # Recommendations: The Recommendations microservice
+  ###################################################
+  recommendations:
+    env_file:
+      - ./Recommendations_Module/spotify_api_keys.env
+    build:
+      context: ./Recommendations_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "5000:5000"
+    container_name: recommendations
+
+  #################################
+  # Replay: The Replay microservice
+  #################################
+  replay:
+    env_file:
+      - ./Replay_Module/spotify_api_keys.env
+    build:
+      context: ./Replay_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "5001:5001"
+    container_name: replay
+
+  #####################################################
+  # Make a Blend: The Make a Blend complex microservice
+  #####################################################
+  blend:
+    env_file:
+      - ./Blend_Module/spotify_api_keys.env
+    build:
+      context: ./Blend_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "5004:5004"
+    depends_on:
+      - rabbitmq
+      - error
+      - email
+    container_name: blend
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      recommendations_URL: http://recommendations:5000/generate_recommendations
+      notifications_URL: http://email:4999/api/v1/email
+      error_URL: http://error:4997/api/v1/error
+      PYTHONUNBUFFERED: 1
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    hostname: esd-rabbit
+    # networks:
+    #   - test-net
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # networks:
+    #   - test-net
+    container_name: rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
+#######################################
+  # Postgres: The database used by Kong
+  #######################################
+  kong-database:
+    image: postgres:9.6
+    platform: linux/amd64
+    restart: always
+    # networks:
+    #   - kong-net
+    environment:
+      POSTGRES_DB: kong
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  #######################################
+  # Kong database migration
+  #######################################
+  kong-migration:
+    image: kong:2.0.4
+    platform: linux/amd64
+    command: "kong migrations bootstrap"
+    restart: on-failure
+    # networks:
+    #   - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+    depends_on:
+      - kong-database
+
+  #######################################
+  # Kong: The API Gateway
+  #######################################
+  kong:
+    image: kong:2.0.4
+    platform: linux/amd64
+    restart: always
+    # networks:
+    #   - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: password
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    depends_on:
+      - kong-migration
+    ports:
+      - "8000:8000"
+  
+  #######################################
+  # Konga: Kong GUI
+  #######################################
+  konga:
+    image: pantsel/konga
+    restart: always
+    # networks:
+    #     - kong-net
+    environment:
+      DB_ADAPTER: postgres
+      DB_HOST: kong-database
+      DB_USER: kong
+      DB_PASSWORD: password
+      DB_DATABASE: konga_db
+    depends_on:
+      - kong
+    ports:
+      - "1337:1337"
+    volumes:
+      - kongadata:/app/kongadata

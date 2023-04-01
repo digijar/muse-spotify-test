@@ -14,7 +14,7 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 load_dotenv('spotify_api_keys.env')
 
-user = os.getenv('usern')
+user = os.getenv('user')
 password = os.getenv('password')
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')

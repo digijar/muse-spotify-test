@@ -1,7 +1,6 @@
 # all imports
 import os
 from random import randint
-import requests
 from flask import Flask, request, jsonify, redirect, url_for, session
 from urllib.parse import urlencode
 import json
