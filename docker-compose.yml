@@ -56,10 +56,8 @@ services:
   # auth: The auth microservice
   #############################
   auth:
-    env_file:
-      - ./Authentication_Module/spotify_api_keys.env
     build:
-      context: ./Authentication_Module
+      context: ./Auth_Module
       dockerfile: auth.Dockerfile
     restart: on-failure
     ports:
