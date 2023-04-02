@@ -6,9 +6,7 @@ volumes:
   rabbitmq_data:
 
 networks:
-  kong-net:
-    driver: bridge
-  test-net:
+  muse-net:
     driver: bridge
 
 services:
@@ -20,8 +18,8 @@ services:
     image: rabbitmq:3-management
     restart: always
     hostname: esd-rabbit
-    # networks:
-    #   - test-net
+    networks:
+      - muse-net
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -36,6 +34,8 @@ services:
   # Email: The Email (AMQP) microservice
   ######################################
   email:
+    networks:
+      - muse-net
     env_file:
       - ./Notification_Module/twillo_api_keys.env
     build:
@@ -56,6 +56,8 @@ services:
   # Error: The Error (AMQP) microservice
   ######################################
   error:
+    networks:
+      - muse-net
     env_file:
       - ./TS_Error_Module/spotify_api_keys.env
     build:
@@ -76,6 +78,8 @@ services:
   # auth: The auth microservice
   #############################
   auth:
+    networks:
+      - muse-net
     build:
       context: ./Auth_Module
       dockerfile: auth.Dockerfile
@@ -88,6 +92,8 @@ services:
   # Authentication: The Authentication microservice
   #################################################
   authentication:
+    networks:
+      - muse-net
     env_file:
       - ./Authentication_Module/spotify_api_keys.env
     build:
@@ -102,6 +108,8 @@ services:
   # Group: The Group microservice
   ###############################
   group:
+    networks:
+      - muse-net
     env_file:
       - ./Group_Module/spotify_api_keys.env
     build:
@@ -116,6 +124,8 @@ services:
   # Recommendations: The Recommendations microservice
   ###################################################
   recommendations:
+    networks:
+      - muse-net
     env_file:
       - ./Recommendations_Module/spotify_api_keys.env
     build:
@@ -130,6 +140,8 @@ services:
   # Replay: The Replay microservice
   #################################
   replay:
+    networks:
+      - muse-net
     env_file:
       - ./Replay_Module/spotify_api_keys.env
     build:
@@ -144,6 +156,8 @@ services:
   # Make a Blend: The Make a Blend complex microservice
   #####################################################
   blend:
+    networks:
+      - muse-net
     env_file:
       - ./Blend_Module/spotify_api_keys.env
     build:
@@ -167,15 +181,15 @@ services:
       PYTHONUNBUFFERED: 1
 
 
-#######################################
+  #######################################
   # Postgres: The database used by Kong
   #######################################
   kong-database:
     image: postgres:9.6
     platform: linux/amd64
     restart: always
-    # networks:
-    #   - kong-net
+    networks:
+      - muse-net
     environment:
       POSTGRES_DB: kong
       POSTGRES_USER: kong
@@ -198,8 +212,8 @@ services:
     platform: linux/amd64
     command: "kong migrations bootstrap"
     restart: on-failure
-    # networks:
-    #   - kong-net
+    networks:
+      - muse-net
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
@@ -215,8 +229,8 @@ services:
     image: kong:2.0.4
     platform: linux/amd64
     restart: always
-    # networks:
-    #   - kong-net
+    networks:
+      - muse-net
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
@@ -235,8 +249,8 @@ services:
   konga:
     image: pantsel/konga
     restart: always
-    # networks:
-    #     - kong-net
+    networks:
+      - muse-net
     environment:
       DB_ADAPTER: postgres
       DB_HOST: kong-database

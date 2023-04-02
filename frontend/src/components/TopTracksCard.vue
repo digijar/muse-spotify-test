@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     getTopTracks() {
-      axios.get('http://127.0.0.1:5001/api/v1/get_top_tracks', {
+      axios.get('http://localhost:8000/api/v1/get_top_tracks', {
         headers: {
           'Email': `${email}`
         }

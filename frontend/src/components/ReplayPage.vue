@@ -61,7 +61,7 @@ export default {
     // call Replay microservice to reload database information
     replay() {
       var auth_token = localStorage.getItem('spotifyAuthToken')
-      axios.get('http://127.0.0.1:5001/api/v1/reload_top_items', {
+      axios.get('http://localhost:8000/api/v1/reload_top_items', {
         headers: {
           'Authorization': `Bearer ${auth_token}`,
           'Email':  `${email}`

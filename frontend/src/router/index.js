@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
 })
 
 function getUserEmail(auth_token) {
-  axios.get('http://127.0.0.1:5002/api/v1/email', {
+  axios.get('http://localhost:8000/api/v1/email', {
     headers: {
       'Authorization': `Bearer ${auth_token}`
     }
@@ -127,7 +127,7 @@ function redirectToSpotifyAuth() {
 
 function getAuthTokenFromPython(code) {
   // Make an Axios API request to the Python microservice to get the authorization token and refresh code
-  axios.get('http://127.0.0.1:5002/api/v1/login', { params: { code } })
+  axios.get('http://localhost:8000/api/v1/login', { params: { code } })
     .then((response) => {
       const auth_token = response.data.auth_token
       const refresh_token = response.data.refresh_token
@@ -150,7 +150,7 @@ function refreshAuthTokenWithPython() {
   const refresh_token = localStorage.getItem('spotifyRefreshToken')
 
   // Make an Axios API request to the Python microservice to refresh the authorization token
-  axios.post('http://127.0.0.1:5002/api/v1/refresh', { refresh_token })
+  axios.post('http://localhost:8000/api/v1/refresh', { refresh_token })
     .then((response) => {
       const auth_token = response.data.auth_token
 

@@ -173,7 +173,7 @@ export default {
 
   methods: {
     checkPersonalUpload() {
-      axios.get('http://127.0.0.1:5004/api/v1/check_personalUpload', {
+      axios.get('http://localhost:8000/api/v1/check_personalUpload', {
         headers: {
           'Authorization': `Bearer ${auth_token}`,
           'Email': `${email}`,
@@ -195,7 +195,7 @@ export default {
     },
 
     checkGroupStatus() {
-      axios.get('http://127.0.0.1:5004/api/v1/check_groupStatus', {
+      axios.get('http://localhost:8000/api/v1/check_groupStatus', {
         headers: {
           "group_name": this.group_name
         }
@@ -214,7 +214,7 @@ export default {
 
     // for Recommendations
     checkRecommendedStatus() {
-      axios.get('http://127.0.0.1:5004/api/v1/check_recommendedStatus', {
+      axios.get('http://localhost:8000/api/v1/check_recommendedStatus', {
         headers: {
           "group_name": this.group_name
         }
@@ -234,7 +234,7 @@ export default {
     },
 
     savePlaylist() {
-      axios.post('http://127.0.0.1:5004/api/v1/save_playlist', 
+      axios.post('http://localhost:8000/api/v1/save_playlist', 
       {
         'playlist_link': this.inputPlaylistLink,
         'email': `${email}`,
@@ -254,7 +254,7 @@ export default {
     },
 
     generateRecommendations() {
-      axios.get('http://127.0.0.1:5004/api/v1/get_recommendations', {
+      axios.get('http://localhost:8000/api/v1/get_recommendations', {
         headers: {
           'Authorization': `Bearer ${auth_token}`,
           'Email': `${email}`,
@@ -274,7 +274,7 @@ export default {
     },
 
     deleteRecommendedPlaylist() {
-      axios.post('http://127.0.0.1:5004/api/v1/remove_playlist', 
+      axios.post('http://localhost:8000/api/v1/remove_playlist', 
       {
         "group_name": this.group_name
       })
