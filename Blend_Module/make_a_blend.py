@@ -91,6 +91,11 @@ def processEmail(friend_json):
     code = notification_result["code"]
     message = json.dumps(notification_result)
 
+    error_payload = {
+        "code": notification_result["code"],
+        "message": notification_result["message"]
+    }
+
     amqp_setup.check_setup()
 
     if code not in range(200, 300):
@@ -100,7 +105,7 @@ def processEmail(friend_json):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notification.error", 
             body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
         
-        error_result = invoke_http(error_URL, method='POST', json=message)
+        error_result = invoke_http(error_URL, method='POST', json=error_payload)
         print('error_result:', error_result)
 
         return {

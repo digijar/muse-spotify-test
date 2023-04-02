@@ -12,6 +12,26 @@ networks:
     driver: bridge
 
 services:
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    hostname: esd-rabbit
+    # networks:
+    #   - test-net
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # networks:
+    #   - test-net
+    container_name: rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
   ######################################
   # Email: The Email (AMQP) microservice
   ######################################
@@ -37,9 +57,9 @@ services:
   ######################################
   error:
     env_file:
-      - ./Error_Module/spotify_api_keys.env
+      - ./TS_Error_Module/spotify_api_keys.env
     build:
-      context: ./Error_Module
+      context: ./TS_Error_Module
       dockerfile: Dockerfile
     depends_on:
       - rabbitmq
@@ -145,24 +165,6 @@ services:
       notifications_URL: http://email:4999/api/v1/email
       error_URL: http://error:4997/api/v1/error
       PYTHONUNBUFFERED: 1
-
-  ####################################
-  # RabbitMQ: The messaging broker   
-  ####################################
-  rabbitmq:
-    image: rabbitmq:3-management
-    restart: always
-    hostname: esd-rabbit
-    # networks:
-    #   - test-net
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    # networks:
-    #   - test-net
-    container_name: rabbitmq
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
 
 
 #######################################

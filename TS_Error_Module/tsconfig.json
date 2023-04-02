@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "dist",
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": ["src/**/*.ts", "src/models/amqpSetup.tsmqpSsrc/models/amqpSetup.tsrc/models/amqpSetup.ts", "src/models/error.tsls/error.ts", "amqpSetup.ts", "amqpSetup.ts", "error.ts"],
+    "exclude": ["node_modules"]
+}

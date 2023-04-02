@@ -96,6 +96,10 @@ def processNotification(body):
             }
         ), 500
 
+if __name__ == '__main__':
+    print("This is flask for " + os.path.basename(__file__) + ": manage notifications ...")
+    app.run(host='0.0.0.0', port=4999, debug=True)
+
     # return jsonify(
     #     {
     #         "code": 201,
@@ -175,7 +179,3 @@ def processNotification(body):
 #             "response": "notification sent"
 #         }
 #     ), 201
-
-if __name__ == '__main__':
-    print("This is flask for " + os.path.basename(__file__) + ": manage notifications ...")
-    app.run(host='0.0.0.0', port=4999, debug=True)
