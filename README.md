@@ -15,3 +15,4 @@ A few pre-requisites for you to embark on your enjoy with müse:
 To start using müse:
 - use `docker-compose up` to start running all the microservices
 - `cd frontend`, `npm install`, `npm run build`, and `npm run dev` to run müse's GUI on your localhost!
+- import the kong-snapshot.json file into your Kong configuration using the Konga Interface
