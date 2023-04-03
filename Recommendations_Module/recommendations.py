@@ -2,12 +2,8 @@
 import os
 import random
 from random import randint
-import base64
 import requests
-from flask import Flask, request, jsonify, redirect, url_for, session, render_template, render_template_string
-from urllib.parse import urlencode
-import json
-from flask import session
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 # for API Keys
@@ -135,94 +131,6 @@ def generate_recommendations():
         return jsonify({"code": 201, "name": new_playlist["name"], "link": new_playlist["external_urls"]["spotify"], "id": new_playlist["id"]}), 201
     else:
         return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
-
-
-
-
-
-
-
-
-############# MISCELLANEOUS FUNCTIONS ##############
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route('/login')
-def login():
-    params = {
-        'client_id': SPOTIFY_CLIENT_ID,
-        'response_type': 'code',
-        'redirect_uri': SPOTIFY_REDIRECT_URI,
-        'scope': 'user-read-private user-read-email user-top-read playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public',
-    }
-    auth_url = f'{SPOTIFY_AUTH_URL}?{urlencode(params)}'
-    return redirect(auth_url)
-
-@app.route('/callback')
-def callback():
-    code = request.args.get('code')
-    if code:
-        # Code for exchanging the authorization code for an access token
-        token_data = {
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': SPOTIFY_REDIRECT_URI,
-            'client_id': SPOTIFY_CLIENT_ID,
-            'client_secret': SPOTIFY_CLIENT_SECRET
-        }
-        response = requests.post(SPOTIFY_TOKEN_URL, data=token_data)
-
-        if response.status_code == 200:
-            tokens = response.json()
-            session['access_token'] = tokens['access_token']
-            session['refresh_token'] = tokens['refresh_token']  # Store the refresh token
-            return redirect('/top_artists_tracks')
-        else:
-            return jsonify({"code": response.status_code, "message": "An error occurred while exchanging the authorization code for an access token."}), response.status_code
-
-
-@app.route('/recommendations')
-def recommendations():
-
-    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
-    if not access_token and 'access_token' in session:
-        access_token = session['access_token']
-
-    if access_token:
-        return render_template("recommendations.html", access_token=access_token)
-    else:
-        # Refresh the access token
-        refresh_token = session.get('refresh_token')
-        new_access_token = refresh_access_token(refresh_token)
-        if new_access_token:
-            access_token = new_access_token
-            session['access_token'] = new_access_token
-            return render_template("recommendations.html", access_token=new_access_token)
-        
-        else:
-            return jsonify({"code": 400, "message": "Bad request. Missing access token."}), 400
-
-### For Refresh Tokens
-def refresh_access_token(refresh_token):
-    data = {
-        'grant_type': 'refresh_token',
-        'refresh_token': refresh_token,
-        'client_id': SPOTIFY_CLIENT_ID,
-        'client_secret': SPOTIFY_CLIENT_SECRET
-    }
-
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-
-    token_response = requests.post(SPOTIFY_TOKEN_URL, data=data, headers=headers)
-    token_info = token_response.json()
-
-    if 'access_token' in token_info:
-        return token_info['access_token']
-    else:
-        return None
 
 
 ### setting flask host and port
