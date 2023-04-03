@@ -6,7 +6,7 @@
   <div class="container">
     <div class="row mx-auto d-flex align-items-center justify-content-center">
       <div class="col">
-        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto"
+        <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mx-auto"
           style="height: 150px; width: 150px;">
           <span class="text-white" style="font-size: 3em;">you</span>
         </div>
@@ -16,7 +16,7 @@
       </div>
 
       <div class="col" v-for="(friend, idx) in friends">
-        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto"
+        <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mx-auto"
           style="height: 150px; width: 150px;">
           <span class="text-white" style="font-size: 10px;">{{ friend }}</span>
         </div>
@@ -26,7 +26,7 @@
       </div>
 
       <div class="col" v-for="i in num" data-bs-toggle="modal" data-bs-target="#btn1Modal">
-        <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto"
+        <div class="rounded-circle bg-dark d-flex align-items-center justify-content-center mx-auto"
           style="height: 150px; width: 150px;">
           <span class="text-white font-weight-bold" style="font-size: 3em;">+</span>
         </div>
