@@ -22,8 +22,8 @@
                     <h6 class="card-subtitle text-muted mb-2"> <a :href="personalAlbumLink" target="_blank">Album Link</a></h6>
                   </div>
 
-                  <div v-if="personalUpload && recommendedStatus == false">
-                    <button class="text-center btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
+                  <div v-if="personalUpload && recommendedStatus == false" class="mx-auto mb-3">
+                    <button class="text-center mx-auto btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
                       playlist?</button>
                   </div>
                 </div>
