@@ -65,8 +65,17 @@ def add_friend():
     friends.append(friend_email)
     result = db.group.update_one({'group_name': group_name}, {'$set': {'friends': friends}})
 
+    # check if friend is in database
+    result1 = db.user.find_one({"email": friend_email})
+    if result1:
+        print("friend is already registered with müse")
+        registered = True
+    else:
+        print("friend not in database")
+        registered = False
+
     # convert friend's email to json
-    data = {"friend_email": friend_email}
+    data = {"friend_email": friend_email, "registered": registered}
     friend_json = json.dumps(data)
 
     # sending friend's email to notification queue
@@ -122,6 +131,21 @@ def processEmail(friend_json):
             "notification_result": notification_result,
         }
     }
+
+
+@app.route('/api/v1/remove_friend', methods=['POST'])
+def process_friend_data():
+    # remove friend from group
+    data = request.get_json()
+    group_name = data.get('group_name')
+    friend_email = data.get('friend_email')
+    data = {
+        'group_name': group_name,
+        'friend_email': friend_email
+    }
+    print(f"Received friend data: {friend_email} in {group_name}")
+    friend_deletion_info = requests.post('http://group:4998/group/remove_friend', data=data).json()
+    return jsonify(friend_deletion_info)
 
 
 ### get_recommendations (invokes recommendation) ###
@@ -229,16 +253,35 @@ def check_recommendedStatus():
 def save_playlist():
     data = request.get_json()
     playlist_link = data.get('playlist_link')
+    print("this is the input playlist link: " + playlist_link)
     email = data.get('email')
     group_name = data.get('group_name')
+    access_token = data.get('access_token')
 
     def get_spotify_id(spotify_url):
+        # check if the input string is already a Spotify playlist ID
+        if len(spotify_url) == 22:
+            return spotify_url
+        
+        # otherwise, handle both web and app urls
         parsed_url = urllib.parse.urlparse(spotify_url)
         spotify_id = parsed_url.path.split('/')[-1]
         return spotify_id
     
     playlist_id = get_spotify_id(playlist_link)
     print("successfully parsed playlist id " + playlist_id)
+
+    # check with spotify whether playlist is valid:
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {access_token}'
+    }
+    response = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}', headers=headers)
+    if response.status_code != 200:
+        # return an error message if the playlist ID is not valid
+        return jsonify({'message': 'Invalid playlist ID'}), 400
+
+    # if playlist ID is valid, save playlist into group
     data = {
         'Email': email,
         'group_name': group_name,

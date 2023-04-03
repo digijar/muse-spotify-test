@@ -23,6 +23,10 @@
         <div class="d-flex align-items-center justify-content-center">
           Friend {{ idx+1 }}
         </div>
+        <div>
+          <button class="btn btn-light btn-outline-dark" v-bind:data-friend="friend" v-on:click="deleteFriend(friend)">Delete this friend!</button>
+        </div>
+        
       </div>
 
       <div class="col" v-for="i in num" data-bs-toggle="modal" data-bs-target="#btn1Modal">
@@ -133,6 +137,23 @@ export default {
             this.feedbackMessage = 'An error occurred while adding the friend.';
           }
         });
+    },
+
+    deleteFriend(friend) {
+      axios.post('http://localhost:8000/api/v1/remove_friend', 
+      {
+        "group_name": this.group_name,
+        "friend_email": friend
+      })
+      .then(response => {
+        console.log('friend removed? ' + response.data)
+        setTimeout(function(){
+          window.location.reload();
+        }, 3000);
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
   },
 

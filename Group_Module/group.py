@@ -196,12 +196,28 @@ def group_remove_playlist():
     group_name = data.get('group_name')
     removedStatus = False
     result = db.group.update_one(
-            {'group_name': group_name, "recommended_playlist": { "$exists": True }},
-            {"$set": {"recommended_playlist": {}}},
-        )
+        {'group_name': group_name, "recommended_playlist": { "$exists": True }},
+        {"$set": {"recommended_playlist": {}}},
+    )
     if result.modified_count != 0:
         removedStatus = True
     return jsonify(removedStatus)
+
+@app.route("/group/remove_friend", methods=['POST'])
+def group_remove_friend():
+    data = request.form
+    group_name = data.get('group_name')
+    friend_email = data.get('friend_email')
+    removedStatus = False
+
+    result = db.group.update_one(
+        {"group_name": group_name},
+        {"$pull": {"friends": friend_email}}
+    )
+    if result.modified_count != 0:
+        removedStatus = True
+    return jsonify(removedStatus)
+
 
 
 

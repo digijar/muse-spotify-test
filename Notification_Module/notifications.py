@@ -51,29 +51,53 @@ def callback(channel, method, properties, body):
 
 def processNotification(body):
     friend_email = body["friend_email"]
+    registered = body["registered"]
 
     sg = sendgrid.SendGridAPIClient(api_key=os.getenv('SENDGRID_API_KEY'))
-    data = {
-    "personalizations": [
-        {
-        "to": [
+    if registered:
+        data = {
+        "personalizations": [
             {
-            "email": friend_email
+            "to": [
+                {
+                "email": friend_email
+                }
+            ],
+            "subject": "Join my müse group now!"
             }
         ],
-        "subject": "Join my müse group now!"
+        "from": {
+            "email": "muse.spotify.automation@gmail.com"
+        },
+        "content": [
+            {
+            "type": "text/html",
+            "value": "Dear " + friend_email + " <br><br> Click <a href='http://localhost:5173/'>here</a> to join my müse group to customise your own <strong>spotify playlists</strong> with your friends! <br><br>Best Regards,<br>müse"
+            }
+        ]
         }
-    ],
-    "from": {
-        "email": "muse.spotify.automation@gmail.com"
-    },
-    "content": [
-        {
-        "type": "text/html",
-        "value": "Dear " + friend_email + " <br><br> Click <a href='http://localhost:5173/'>here</a> to join my müse group to customise your own <strong>spotify playlists</strong> with your friends! <br><br>Best Regards,<br>müse"
+    else:
+        data = {
+        "personalizations": [
+            {
+            "to": [
+                {
+                "email": friend_email
+                }
+            ],
+            "subject": "Join my müse group now!"
+            }
+        ],
+        "from": {
+            "email": "muse.spotify.automation@gmail.com"
+        },
+        "content": [
+            {
+            "type": "text/html",
+            "value": "Dear " + friend_email + " <br><br> Click <a href='http://localhost:5173/signup'>here</a> to join my müse group to customise your own <strong>spotify playlists</strong> with your friends! <br><br>Best Regards,<br>müse"
+            }
+        ]
         }
-    ]
-    }
 
     try:
         response = sg.client.mail.send.post(request_body=data)

@@ -113,14 +113,15 @@
           <div class="modal-body">
             <form>
               <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Playlist URL: {{ this.inputPlaylistLink }}</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <label for="exampleInputEmail1" class="form-label">Playlist URL:</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="inputPlaylistLink">
               </div>
             </form>
           </div>
           <div class="modal-footer">
+            <div v-if="feedbackMessage" class="alert alert-dismissible alert-danger">{{ feedbackMessage }}</div>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button @click="savePlaylist" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+            <button @click="savePlaylist" type="button" class="btn btn-primary">Save Changes</button>
           </div>
         </div>
       </div>
@@ -164,7 +165,9 @@ export default {
 
       // clicked: false,
 
-    playlist_ids: [],
+      playlist_ids: [],
+
+      feedbackMessage: "",
     }
   },
 
@@ -245,19 +248,26 @@ export default {
       {
         'playlist_link': this.inputPlaylistLink,
         'email': `${email}`,
-        "group_name": this.group_name
+        "group_name": this.group_name,
+        "access_token": `${auth_token}`
       })
         .then((response) => {
-          console.log('playlist saved?' + response.data)
+          console.log('playlist saved? ' + response.data)
+          this.feedbackMessage = 'solid playlist';
+          setTimeout(function(){
+            window.location.reload();
+          }, 3000)
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status === 400) {
+            this.feedbackMessage = 'Invalid playlist ID, re-input playlist link';
+          } else {
+            this.feedbackMessage = 'An error occurred while saving the playlist';
+          }
       });
 
       this.inputPlaylistLink = ""
-      setTimeout(function(){
-        window.location.reload();
-      }, 3000)
       // this.clicked = 'true'
 ;
     },
@@ -288,7 +298,7 @@ export default {
         "group_name": this.group_name
       })
         .then((response) => {
-          console.log('recommended playlist deleted?' + response.data)
+          console.log('recommended playlist deleted? ' + response.data)
           setTimeout(function(){
             window.location.reload();
           }, 3000);
