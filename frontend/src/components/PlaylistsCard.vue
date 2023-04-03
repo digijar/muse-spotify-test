@@ -4,16 +4,21 @@
       <h4 style="color: black">Your Shared Groups</h4>
     </div>
     <div class="container-fluid">
-      <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
+      <!-- <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
         <div class="col">
-          <div class="card-1 card-block ">
-            <button class="text-center" data-bs-toggle="modal" data-bs-target="#createGroupModal">create group</button>
+          <div class="card-1 card-block align-items-center container d-flex align-items-center justify-content-center">
+            <button class="btn btn-outline-dark btn-light align-middle" style='margin-top: auto; margin-bottom: auto;' data-bs-toggle="modal" data-bs-target="#createGroupModal">create group</button>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <div v-if="actual" class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
+        <div class="col">
+          <div class="card-1 card-block align-items-center container d-flex align-items-center justify-content-center">
+            <button class="btn btn-outline-dark btn-light align-middle" style='margin-top: auto; margin-bottom: auto;' data-bs-toggle="modal" data-bs-target="#createGroupModal">create group</button>
+          </div>
+        </div>
         <div v-for='group in actual_groups' class="col">
           <RouterLink :to="{ name: 'blend', params: { group_name: group } }">
             <div class="card-1 card-block"></div>
@@ -26,6 +31,11 @@
       </div>
 
       <div v-else class="scrolling-wrapper row flex-row flex-nowrap mt-4 pt-2">
+        <div class="col">
+          <div class="card-1 card-block align-items-center container d-flex align-items-center justify-content-center">
+            <button class="btn btn-outline-dark btn-light align-middle" style='margin-top: auto; margin-bottom: auto;' data-bs-toggle="modal" data-bs-target="#createGroupModal">create group</button>
+          </div>
+        </div>
         <div v-for='group in dummy_groups' class="col">
           <RouterLink :to="{ name: 'blend', params: { group_name: group } }">
             <div class="card-1 card-block"></div>
@@ -46,7 +56,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="btn1ModalLabel">New playlist</h5>
+          <h5 class="modal-title" id="btn1ModalLabel">New Group</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

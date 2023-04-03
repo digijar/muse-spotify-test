@@ -14,8 +14,6 @@
           <span class="nav_item" style="font-size: 25.89px; font-weight: 800;">replay</span>
         </router-link>
 
-        <span>Account</span>
-
       </div>
 
     </div>

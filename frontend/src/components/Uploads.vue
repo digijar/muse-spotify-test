@@ -23,7 +23,7 @@
                   </div>
 
                   <div v-if="personalUpload && recommendedStatus == false">
-                    <button class="text center" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
+                    <button class="text-center btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#changeBtnModal">change your
                       playlist?</button>
                   </div>
                 </div>
@@ -40,7 +40,7 @@
           <div class="text-center">
             <h5>Upload your playlist!</h5>
             <h5>Your friends are waiting for you</h5>
-            <button class="" data-bs-toggle="modal" data-bs-target="#changeBtnModal">Upload your playlist!</button>
+            <button class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#changeBtnModal">Upload your playlist!</button>
           </div>
           <!-- <div class="container-fluid">
             <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2 justify-content-center">
@@ -114,7 +114,7 @@
             <form>
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Playlist URL: {{ this.inputPlaylistLink }}</label>
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="inputPlaylistLink">
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
               </div>
             </form>
           </div>
@@ -126,6 +126,11 @@
       </div>
     </div>
 
+<!-- <div v-if="clicked && personalUpload == false">
+  <div class="alert alert-secondary" role="alert">
+      Invalid playlist link! Please try again.
+    </div>
+</div> -->
 
 
 
@@ -156,6 +161,8 @@ export default {
       recommendedAlbumCover: "",
       recommendedAlbumName: "",
       recommendedAlbumLink: "",
+
+      // clicked: false,
 
     playlist_ids: [],
     }
@@ -250,7 +257,9 @@ export default {
       this.inputPlaylistLink = ""
       setTimeout(function(){
         window.location.reload();
-      }, 3000);
+      }, 3000)
+      // this.clicked = 'true'
+;
     },
 
     generateRecommendations() {
