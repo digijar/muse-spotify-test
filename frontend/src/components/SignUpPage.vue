@@ -53,7 +53,7 @@ export default {
         console.log(this.email, this.password);
 
         // Send request to Flask API to authenticate user and retrieve JWT
-        const response = await axios.post('http://localhost:8000/api/createUser', {
+        const response = await axios.post('http://localhost:8000/api/v1/mongo_createUser', {
           email: this.email,
           password: this.password,
         });

@@ -180,6 +180,52 @@ services:
       error_URL: http://error:4997/api/v1/error
       PYTHONUNBUFFERED: 1
 
+  ###############################################################
+  # Listening History: The Listening History complex microservice
+  ###############################################################
+  listening:
+    networks:
+      - muse-net
+    env_file:
+      - ./Listening_History_Module/spotify_api_keys.env
+    build:
+      context: ./Listening_History_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "5005:5005"
+    depends_on:
+      - rabbitmq
+      - error
+      - email
+      - replay
+    container_name: listening
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      notifications_URL: http://email:4999/api/v1/top_items_email
+      error_URL: http://error:4997/api/v1/error
+      PYTHONUNBUFFERED: 1
+
+  ###############################################################
+  # Login Management: The Login Management complex microservice
+  ###############################################################
+  login_management:
+    networks:
+      - muse-net
+    env_file:
+      - ./Login_Management_Module/spotify_api_keys.env
+    build:
+      context: ./Login_Management_Module
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "5006:5006"
+    depends_on:
+      - auth
+      - authentication
+    container_name: login_management
+
 
   #######################################
   # Postgres: The database used by Kong

@@ -55,8 +55,8 @@ def refresh_auth_token(refresh_token):
 
     return response_data['access_token'], response_data['expires_in']
 
-@app.route('/api/v1/login')
-def login():
+@app.route('/authenticate/login')
+def authenticate_login():
     code = request.args.get('code')
 
     if not code:
@@ -77,9 +77,10 @@ def login():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route('/api/v1/refresh', methods=['POST'])
-def refresh():
-    refresh_token = request.json['refresh_token']
+@app.route('/authenticate/refresh', methods=['POST'])
+def authenticate_refresh():
+    data = request.form
+    refresh_token = data.get('refresh_token')
 
     if not refresh_token:
         return jsonify({'error': 'Missing refresh token'})
@@ -98,9 +99,9 @@ def refresh():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route('/api/v1/email')
-def email():
-    access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+@app.route('/authenticate/email')
+def authenticate_email():
+    access_token = request.args.get('access_token')
     if not access_token and 'access_token' in session:
         access_token = session['access_token']
 

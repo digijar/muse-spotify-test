@@ -2,16 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const mongodb = require('mongodb');
 const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 
 const MongoClient = mongodb.MongoClient;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 const mongoUri = "mongodb+srv://esdmuse:esdmuse@musecluster.egcmgf4.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true, tlsAllowInvalidCertificates: true });
 
-app.post('/api/authenticate', async (req, res) => {
+app.post('/auth/authenticate', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -36,7 +38,7 @@ app.post('/api/authenticate', async (req, res) => {
     }
 });
 
-app.post('/api/createUser', async (req, res) => {
+app.post('/auth/createUser', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync());
