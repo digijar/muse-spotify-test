@@ -83,6 +83,7 @@ def reload_top_items():
 
     if reload_info["code"] == 200:
         data = {"email": email, "top_artists": top_artist_arr, "top_tracks": top_tracks_arr}
+        print(data)
         top_items_json = json.dumps(data)
 
         print('\n\n-----Publishing the top items email with routing_key=top.notification-----')
@@ -127,6 +128,7 @@ def processEmail(top_items_json):
 
     error_payload = {
         "code": notification_result["code"],
+        "friend_email": "digijar@live.com",
         "message": notification_result["message"]
     }
 
