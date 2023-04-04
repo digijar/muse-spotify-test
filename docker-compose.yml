@@ -95,10 +95,10 @@ services:
     networks:
       - muse-net
     env_file:
-      - ./Authentication_Module/spotify_api_keys.env
+      - ./Go_Authentication_Module/spotify_api_keys.env
     build:
-      context: ./Authentication_Module
-      dockerfile: authentication.Dockerfile
+      context: ./Go_Authentication_Module
+      dockerfile: Dockerfile
     restart: on-failure
     ports:
       - "5002:5002"
