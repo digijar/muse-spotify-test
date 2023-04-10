@@ -21,7 +21,7 @@ connection = pika.BlockingConnection(
 channel = connection.channel()
 # Set up the exchange if the exchange doesn't exist
 # - use a 'topic' exchange to enable interaction
-exchangename= "group_topic" #?##
+exchangename= "top_topic" #?##
 exchangetype= "topic" #?##
 channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, durable=True)
     # 'durable' makes the exchange survive broker restarts
@@ -31,7 +31,7 @@ channel.exchange_declare(exchange=exchangename, exchange_type=exchangetype, dura
 
 ############   Error queue   #############
 #delcare Error queue
-queue_name = 'Error' #?##
+queue_name = 'Error2' #?##
 channel.queue_declare(queue=queue_name, durable=True) 
     # 'durable' makes the queue survive broker restarts
 
@@ -43,7 +43,7 @@ channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_
 
 ############   Notifications queue    #############
 #delcare notifications queue
-queue_name = 'Notifications' #?##
+queue_name = 'Notifications2' #?##
 channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 

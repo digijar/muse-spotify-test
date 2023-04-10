@@ -35,6 +35,13 @@ checkSetup((channel: Channel) => {
         processError(db, msg.content.toString());
     }
     }, { noAck: true });
+
+    const queue_name2 = 'Error2';
+    channel.consume(queue_name2, (msg) => {
+        if (msg) {
+            processError(db, msg.content.toString());
+        }
+    }, { noAck: true });
 });
 
 res.status(200).json({ message: 'Error sent to error microservice' });
@@ -49,14 +56,21 @@ function checkSetup(callback: (channel: Channel) => void) {
         if (err) throw err;
 
         conn.createChannel((err, channel) => {
-        if (err) throw err;
-
-        channel.assertExchange('group_topic', 'topic', { durable: true });
-        channel.assertQueue('Error', { durable: true }, (err, q) => {
             if (err) throw err;
-            channel.bindQueue(q.queue, 'group_topic', '*.error');
-            callback(channel);
-        });
+
+            channel.assertExchange('group_topic', 'topic', { durable: true });
+            channel.assertExchange('top_topic', 'topic', { durable: true });
+
+            channel.assertQueue('Error', { durable: true }, (err, q) => {
+                if (err) throw err;
+                channel.bindQueue(q.queue, 'group_topic', '*.error');
+                callback(channel);
+            });
+            channel.assertQueue('Error2', { durable: true }, (err, q) => {
+                if (err) throw err;
+                channel.bindQueue(q.queue, 'top_topic', '*.error');
+                callback(channel);
+            });
         });
     });
 }

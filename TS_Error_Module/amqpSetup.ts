@@ -4,6 +4,7 @@ const hostname = process.env.RABBIT_HOST || 'localhost';
 const port = parseInt(process.env.RABBIT_PORT || '5672');
 const exchangename = 'group_topic';
 const exchangetype = 'topic';
+const exchangename2 = 'top_topic';
 
 let connection: amqp.Connection;
 let channel: amqp.Channel;
@@ -20,6 +21,7 @@ export function checkSetup(callback: () => void): void {
         if (err) throw err;
         channel = ch;
         channel.assertExchange(exchangename, exchangetype, { durable: true });
+        channel.assertExchange(exchangename2, exchangetype, { durable: true });
         callback();
         });
     });

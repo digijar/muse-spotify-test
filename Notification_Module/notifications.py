@@ -126,7 +126,7 @@ def top_items_email():
     result = None
 
     amqp_setup.check_setup()
-    queue_name = 'Notifications'
+    queue_name = 'Notifications2'
     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback_top, auto_ack=True)
     while result is None:
         try:
